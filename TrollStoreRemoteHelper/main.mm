@@ -116,6 +116,7 @@ int main(int argc, char * argv[]) {
     WebviewDelegate* delegate;
     NSMutableArray* logList;
     NSString* helper;
+    NSMutableDictionary* pathMap;
 }
 + (instancetype)inst {
     static dispatch_once_t pred = 0;
@@ -130,6 +131,7 @@ int main(int argc, char * argv[]) {
     self.window = nil;
     self->logList = [NSMutableArray new];
     self->port = G_PORT;
+    [self initPath];
     self->helper = [self findHelper];
     return self;
 }
@@ -143,8 +145,8 @@ int main(int argc, char * argv[]) {
             int status = [self handlePUT:request.path with:request.data];
             return [GCDWebServerResponse responseWithStatusCode:status];
         }];
-        [_webServer addDefaultHandlerForMethod:@"POST" requestClass:GCDWebServerRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerRequest* request) {
-            NSDictionary* jres = [self handlePOST:request.path];
+        [_webServer addDefaultHandlerForMethod:@"POST" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
+            NSDictionary* jres = [self handlePOST:request.path with:request.text];
             return [GCDWebServerDataResponse responseWithJSONObject:jres];
         }];
         NSString* localIP = getLocalIP();
@@ -189,9 +191,28 @@ int main(int argc, char * argv[]) {
         [self addLog:@"helper not find"];
         return nil;
     }
-    NSString* path = [bundlePath stringByAppendingPathComponent:@"trollstorehelper"];
-    [self addLog:@"helper find: %@", path];
-    return path;
+    NSFileManager* man = [NSFileManager defaultManager];
+    NSString* helper_path = [bundlePath stringByAppendingPathComponent:@"trollstorehelper"];
+    if (![man fileExistsAtPath:helper_path]) {
+        [self addLog:@"helper not find"];
+        return nil;
+    }
+    self->pathMap[@"trollstorehelper"] = helper_path;
+    NSString* ldid_path = [bundlePath stringByAppendingPathComponent:@"ldid"];
+    if (![man fileExistsAtPath:ldid_path]) {
+        self->pathMap[@"ldid"] = ldid_path;
+    }
+    [self addLog:@"helper find: %@", helper_path];
+    return helper_path;
+}
+- (void)initPath {
+    self->pathMap = [NSMutableDictionary new];
+    NSFileManager* man = [NSFileManager defaultManager];
+    NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"bin"];
+    for (NSString* item in [man contentsOfDirectoryAtPath:binPath error:nil]) {
+        NSString* full = [binPath stringByAppendingPathComponent:item];
+        self->pathMap[item] = full;
+    }
 }
 - (void)addLog:(NSString*)fmt, ... {
     va_list va;
@@ -202,12 +223,28 @@ int main(int argc, char * argv[]) {
     NSString* dateStr = [dateFormatter stringFromDate:[NSDate date]];
     [self->logList addObject:[NSString stringWithFormat:@"%@\t%@", dateStr, log]];
 }
-- (NSDictionary*)handlePOST:(NSString*)path {
+- (NSDictionary*)handlePOST:(NSString*)path with:(NSString*)data {
     @autoreleasepool {
         if ([path isEqualToString:@"/log"]) {
             return @{
                 @"status": @0,
                 @"data": logList,
+            };
+        } else if ([path isEqualToString:@"/cmd"]) {
+            NSArray* cmd = [data componentsSeparatedByString:@" "];
+            NSString* exe = cmd.firstObject;
+            if (self->pathMap[exe] != nil) {
+                exe = self->pathMap[exe];
+            }
+            NSArray* args = [cmd subarrayWithRange:NSMakeRange(1, cmd.count - 1)];
+            NSString* stdOut = @"";
+            NSString* stdErr = @"";
+            int status = spawnRoot(exe, args, &stdOut, &stdErr);
+            [self addLog:@"cmd=%@ status=%d stdout=%@ stderr=%@", data, status, stdOut, stdErr];
+            return @{
+                @"status": @(status),
+                @"data": stdOut,
+                @"err": stdErr,
             };
         }
         return @{

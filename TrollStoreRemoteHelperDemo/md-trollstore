@@ -49,5 +49,9 @@ if [ ! -z "${TROLLSTORE_DEVICE_IP}" ]; then
 	fi
 fi
 
+if [ ! -z "${TROLLSTORE_CMD}" ]; then
+	curl ${TROLLSTORE_DEVICE_IP}:1222/cmd -d "${TROLLSTORE_CMD}"
+fi
+
 exit 0
 

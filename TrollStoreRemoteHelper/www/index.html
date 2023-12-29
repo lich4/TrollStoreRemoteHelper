@@ -14,10 +14,12 @@
     <script>
         function update_log() {
             $.post("/log", "{}", (data, status) => {
-                var jlog = data.data;
-                var log = jlog.join("<br>");
-                $("#logger").html(log);
-                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+                $("#logger").empty();
+                data.data.forEach(function(item) {
+                    var ele = $("<p style='margin:auto'></p>").text(item);
+                    $("#logger").append(ele);
+                });
+                $("html, body").animate({ scrollTop: $(document).height() }, 100);
             });
         }
         $(function() {

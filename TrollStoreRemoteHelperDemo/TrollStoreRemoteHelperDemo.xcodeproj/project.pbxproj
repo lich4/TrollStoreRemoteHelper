@@ -208,6 +208,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -261,7 +262,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -269,6 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -317,7 +319,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -337,7 +339,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.141;
+				TROLLSTORE_CMD = opainject;
+				TROLLSTORE_DEVICE_IP = 192.168.0.3;
 			};
 			name = Debug;
 		};
@@ -357,7 +360,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.141;
+				TROLLSTORE_CMD = opainject;
+				TROLLSTORE_DEVICE_IP = 192.168.0.3;
 			};
 			name = Release;
 		};

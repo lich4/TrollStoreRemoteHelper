@@ -14,9 +14,25 @@
             filePath = "TrollStoreRemoteHelper/main.mm"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "-handlePOST:"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
+            landmarkName = "-handlePOST:with:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "07BEC77B-8ACD-47DE-BD76-4EA8C7FDCE35"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TrollStoreRemoteHelper/main.mm"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "-handlePOST:with:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

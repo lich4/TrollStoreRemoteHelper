@@ -17,6 +17,7 @@
 		188C91782B3C40B700A13E65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91772B3C40B700A13E65 /* UIKit.framework */; };
 		188C917A2B3C41A000A13E65 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91792B3C41A000A13E65 /* libz.tbd */; };
 		188C917C2B3C41AB00A13E65 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C917B2B3C41AB00A13E65 /* CFNetwork.framework */; };
+		18A7051A2B3F1EF00064B9EF /* bin in Resources */ = {isa = PBXBuildFile; fileRef = 18A705182B3F1EE60064B9EF /* bin */; };
 		18BDC32F2B3D7F20009B411E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC32E2B3D7F20009B411E /* CoreServices.framework */; };
 		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		188C91772B3C40B700A13E65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		188C91792B3C41A000A13E65 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		188C917B2B3C41AB00A13E65 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		18A705182B3F1EE60064B9EF /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
 		18BDC32E2B3D7F20009B411E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		18BDC3302B3D8771009B411E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -78,6 +80,7 @@
 		188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
 			isa = PBXGroup;
 			children = (
+				18A705182B3F1EE60064B9EF /* bin */,
 				188C91742B3C3DF800A13E65 /* www */,
 				18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */,
 				188C91562B3C238C00A13E65 /* Main.storyboard */,
@@ -164,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				188C91762B3C3F9300A13E65 /* www in Resources */,
+				18A7051A2B3F1EF00064B9EF /* bin in Resources */,
 				188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */,
 				188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */,
 				188C91582B3C238C00A13E65 /* Main.storyboard in Resources */,
@@ -228,10 +232,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -262,6 +263,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -285,7 +287,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -293,10 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -327,6 +326,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -345,7 +345,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -356,6 +356,7 @@
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YZGT4R4484;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/framework,
@@ -378,6 +379,7 @@
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YZGT4R4484;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/framework,
