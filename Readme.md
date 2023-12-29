@@ -37,5 +37,6 @@ ECFFE318F937/tmp/TroIStoreRemoteHelperDemo.ipa
 
 &emsp;&emsp;这里解决了XCode自动安装TrollStore App的问题，如果要调试可以在越狱环境下使用我的另一个项目`https://github.com/lich4/debugserver_azj`
 
+[](https://raw.githubusercontent.com/lich4/TrollStoreRemoteHelper/main/screenshot.md)
 
 
