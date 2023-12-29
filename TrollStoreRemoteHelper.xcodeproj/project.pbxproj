@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		188C91582B3C238C00A13E65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C91562B3C238C00A13E65 /* Main.storyboard */; };
+		188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 188C91592B3C239000A13E65 /* Assets.xcassets */; };
+		188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */; };
+		188C91682B3C23B300A13E65 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188C91662B3C23B300A13E65 /* main.mm */; };
+		188C916A2B3C24AA00A13E65 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188C91692B3C24AA00A13E65 /* utils.mm */; };
+		188C916E2B3C28D300A13E65 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C916D2B3C28D300A13E65 /* GCDWebServers.framework */; };
+		188C91762B3C3F9300A13E65 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 188C91742B3C3DF800A13E65 /* www */; };
+		188C91782B3C40B700A13E65 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91772B3C40B700A13E65 /* UIKit.framework */; };
+		188C917A2B3C41A000A13E65 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91792B3C41A000A13E65 /* libz.tbd */; };
+		188C917C2B3C41AB00A13E65 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C917B2B3C41AB00A13E65 /* CFNetwork.framework */; };
+		18BDC32F2B3D7F20009B411E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC32E2B3D7F20009B411E /* CoreServices.framework */; };
+		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollStoreRemoteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		188C91572B3C238C00A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		188C91592B3C239000A13E65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		188C915C2B3C239000A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		188C915E2B3C239000A13E65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		188C91662B3C23B300A13E65 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		188C91692B3C24AA00A13E65 /* utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = utils.mm; sourceTree = "<group>"; };
+		188C916B2B3C24F800A13E65 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		188C916D2B3C28D300A13E65 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = ../../../../../opt/framework/GCDWebServers.framework; sourceTree = "<group>"; };
+		188C916F2B3C30BE00A13E65 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = ../../../../../opt/theos/sdks/iPhoneOS12.2.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = "<group>"; };
+		188C91742B3C3DF800A13E65 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		188C91772B3C40B700A13E65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		188C91792B3C41A000A13E65 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		188C917B2B3C41AB00A13E65 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
+		18BDC32E2B3D7F20009B411E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		18BDC3302B3D8771009B411E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		188C91472B3C238C00A13E65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */,
+				188C917C2B3C41AB00A13E65 /* CFNetwork.framework in Frameworks */,
+				18BDC32F2B3D7F20009B411E /* CoreServices.framework in Frameworks */,
+				188C91782B3C40B700A13E65 /* UIKit.framework in Frameworks */,
+				188C916E2B3C28D300A13E65 /* GCDWebServers.framework in Frameworks */,
+				188C917A2B3C41A000A13E65 /* libz.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		188C91412B3C238C00A13E65 = {
+			isa = PBXGroup;
+			children = (
+				188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */,
+				188C914B2B3C238C00A13E65 /* Products */,
+				188C916C2B3C28D200A13E65 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		188C914B2B3C238C00A13E65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
+			isa = PBXGroup;
+			children = (
+				188C91742B3C3DF800A13E65 /* www */,
+				18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */,
+				188C91562B3C238C00A13E65 /* Main.storyboard */,
+				188C91592B3C239000A13E65 /* Assets.xcassets */,
+				188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */,
+				188C915E2B3C239000A13E65 /* Info.plist */,
+				188C91662B3C23B300A13E65 /* main.mm */,
+				188C91692B3C24AA00A13E65 /* utils.mm */,
+				188C916B2B3C24F800A13E65 /* utils.h */,
+			);
+			path = TrollStoreRemoteHelper;
+			sourceTree = "<group>";
+		};
+		188C916C2B3C28D200A13E65 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				18BDC3302B3D8771009B411E /* WebKit.framework */,
+				18BDC32E2B3D7F20009B411E /* CoreServices.framework */,
+				188C917B2B3C41AB00A13E65 /* CFNetwork.framework */,
+				188C91792B3C41A000A13E65 /* libz.tbd */,
+				188C91772B3C40B700A13E65 /* UIKit.framework */,
+				188C916F2B3C30BE00A13E65 /* CoreServices.framework */,
+				188C916D2B3C28D300A13E65 /* GCDWebServers.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 188C91632B3C239000A13E65 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */;
+			buildPhases = (
+				188C91462B3C238C00A13E65 /* Sources */,
+				188C91472B3C238C00A13E65 /* Frameworks */,
+				188C91482B3C238C00A13E65 /* Resources */,
+				18B26BB12B3D5B8B0030D75D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TrollStoreRemoteHelper;
+			productName = TrollStoreRemoteHelper;
+			productReference = 188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		188C91422B3C238C00A13E65 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1170;
+				ORGANIZATIONNAME = chaoge;
+				TargetAttributes = {
+					188C91492B3C238C00A13E65 = {
+						CreatedOnToolsVersion = 11.7;
+					};
+				};
+			};
+			buildConfigurationList = 188C91452B3C238C00A13E65 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 188C91412B3C238C00A13E65;
+			productRefGroup = 188C914B2B3C238C00A13E65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		188C91482B3C238C00A13E65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				188C91762B3C3F9300A13E65 /* www in Resources */,
+				188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */,
+				188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */,
+				188C91582B3C238C00A13E65 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		18B26BB12B3D5B8B0030D75D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$PWD/md-trollstore\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		188C91462B3C238C00A13E65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				188C91682B3C23B300A13E65 /* main.mm in Sources */,
+				188C916A2B3C24AA00A13E65 /* utils.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		188C91562B3C238C00A13E65 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				188C91572B3C238C00A13E65 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				188C915C2B3C239000A13E65 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		188C91612B3C239000A13E65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					arm64,
+					arm64e,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALID_ARCHS = "arm64 arm64e";
+			};
+			name = Debug;
+		};
+		188C91622B3C239000A13E65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					arm64,
+					arm64e,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 arm64e";
+			};
+			name = Release;
+		};
+		188C91642B3C239000A13E65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YZGT4R4484;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/framework,
+				);
+				INFOPLIST_FILE = TrollStoreRemoteHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		188C91652B3C239000A13E65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YZGT4R4484;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/framework,
+				);
+				INFOPLIST_FILE = TrollStoreRemoteHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		188C91452B3C238C00A13E65 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				188C91612B3C239000A13E65 /* Debug */,
+				188C91622B3C239000A13E65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		188C91632B3C239000A13E65 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				188C91642B3C239000A13E65 /* Debug */,
+				188C91652B3C239000A13E65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 188C91422B3C238C00A13E65 /* Project object */;
+}

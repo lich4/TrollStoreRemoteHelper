@@ -1,0 +1,28 @@
+<html>
+<head>
+    <meta charset="UTF-8" http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <script src="jquery.min.js"></script>
+    <style>
+        .multi-line {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div id="logger" class="multi-line"></div>
+    <script>
+        function update_log() {
+            $.post("/log", "{}", (data, status) => {
+                var jlog = data.data;
+                var log = jlog.join("<br>");
+                $("#logger").html(log);
+                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+            });
+        }
+        $(function() {
+            setInterval(update_log, 1000);
+        });
+    </script>
+</body>
+</html>
