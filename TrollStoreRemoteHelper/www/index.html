@@ -4,19 +4,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <script src="jquery.min.js"></script>
     <style>
-        .multi-line {
+        pre {
+            white-space: pre-wrap;
             word-wrap: break-word;
         }
     </style>
 </head>
 <body>
-    <div id="logger" class="multi-line"></div>
+    <div id="logger"></div>
     <script>
         function update_log() {
             $.post("/log", "{}", (data, status) => {
+                var msg_list = data.data;
+                var last_line = msg_list[msg_list.length - 1];
+                if (document.lastline == last_line) {
+                    return;
+                }
+                document.lastline = last_line;
                 $("#logger").empty();
-                data.data.forEach(function(item) {
-                    var ele = $("<p style='margin:auto'></p>").text(item);
+                msg_list.forEach(function(item) {
+                    var ele = $("<pre></pre>").text(item);
                     $("#logger").append(ele);
                 });
                 $("html, body").animate({ scrollTop: $(document).height() }, 100);
@@ -28,3 +35,4 @@
     </script>
 </body>
 </html>
+

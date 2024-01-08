@@ -28,27 +28,29 @@ NSString* getNSStringFromFile(int fd) {
     }
     while ((num_read = read(fd, &c, sizeof(c)))) {
         [ms appendString:[NSString stringWithFormat:@"%c", c]];
-        if(c == '\n') {
-            break;
-        }
+        //if(c == '\n') {
+        //    break;
+        //}
     }
     return ms.copy;
 }
 
-int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdErr) {
-    NSMutableArray* argsM = args.mutableCopy ?: [NSMutableArray new];
-    [argsM insertObject:path atIndex:0];
-    NSUInteger argCount = [argsM count];
+extern char** environ;
+int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, int flag) {
+    NSString* file = args.firstObject;
+    NSUInteger argCount = [args count];
     char **argsC = (char **)malloc((argCount + 1) * sizeof(char*));
     for (NSUInteger i = 0; i < argCount; i++) {
-        argsC[i] = strdup([[argsM objectAtIndex:i] UTF8String]);
+        argsC[i] = strdup([[args objectAtIndex:i] UTF8String]);
     }
     argsC[argCount] = NULL;
     posix_spawnattr_t attr;
     posix_spawnattr_init(&attr);
-    posix_spawnattr_set_persona_np(&attr, 99, POSIX_SPAWN_PERSONA_FLAGS_OVERRIDE);
-    posix_spawnattr_set_persona_uid_np(&attr, 0);
-    posix_spawnattr_set_persona_gid_np(&attr, 0);
+    if ((flag & SPAWN_FLAG_ROOT) != 0) {
+        posix_spawnattr_set_persona_np(&attr, 99, POSIX_SPAWN_PERSONA_FLAGS_OVERRIDE);
+        posix_spawnattr_set_persona_uid_np(&attr, 0);
+        posix_spawnattr_set_persona_gid_np(&attr, 0);
+    }
     posix_spawn_file_actions_t action;
     posix_spawn_file_actions_init(&action);
     int outErr[2];
@@ -64,8 +66,13 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
         posix_spawn_file_actions_addclose(&action, out[0]);
     }
     pid_t task_pid;
+    pid_t* task_pid_ptr = &task_pid;
+    if (pidPtr != 0) {
+        task_pid_ptr = pidPtr;
+    }
     int status = -200;
-    int spawnError = posix_spawn(&task_pid, [path UTF8String], &action, &attr, (char* const*)argsC, NULL);
+    int spawnError = posix_spawnp(task_pid_ptr, [file UTF8String], &action, &attr, (char* const*)argsC, environ);
+    NSLog(@"posix_spawn %@ %d -> %d", args.firstObject, getpid(), task_pid);
     posix_spawnattr_destroy(&attr);
     for (NSUInteger i = 0; i < argCount; i++) {
         free(argsC[i]);
@@ -74,6 +81,9 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
     if(spawnError != 0) {
         NSLog(@"posix_spawn error %d\n", spawnError);
         return spawnError;
+    }
+    if ((flag & SPAWN_FLAG_NOWAIT) != 0) {
+        return 0;
     }
     __block volatile BOOL _isRunning = YES;
     NSMutableString* outString = [NSMutableString new];
@@ -118,7 +128,6 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
         if(stdErr) {
             close(outErr[1]);
         }
-        // wait for logging queue to finish
         dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         if(stdOut) {
             *stdOut = outString.copy;
@@ -176,6 +185,89 @@ NSString* getLocalIP() { // 获取wifi ipv4
         freeifaddrs(interfaces);
     }
     return result;
+}
+
+void addPathEnv(NSString* path, BOOL tail) {
+    const char* c_path_env = getenv("PATH");
+    NSMutableArray* path_arr = [NSMutableArray new];
+    if (c_path_env != 0) {
+        path_arr = [[@(c_path_env) componentsSeparatedByString:@":"] mutableCopy];
+    }
+    if (tail) {
+        [path_arr addObject:path];
+    } else {
+        [path_arr insertObject:path atIndex:0];
+    }
+    NSString* path_env = [path_arr componentsJoinedByString:@":"];
+    setenv("PATH", path_env.UTF8String, 1);
+}
+
+BOOL localPortOpen(int port) {
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in ip4;
+    memset(&ip4, 0, sizeof(struct sockaddr_in));
+    ip4.sin_len = sizeof(ip4);
+    ip4.sin_family = AF_INET;
+    ip4.sin_port = htons(port);
+    inet_aton("127.0.0.1", &ip4.sin_addr);
+    int so_error = -1;
+    struct timeval tv;
+    fd_set fdset;
+    fcntl(sock, F_SETFL, O_NONBLOCK);
+    connect(sock, (struct sockaddr*)&ip4, sizeof(ip4));
+    FD_ZERO(&fdset);
+    FD_SET(sock, &fdset);
+    tv.tv_sec = 3;
+    tv.tv_usec = 0;
+    if (select(sock + 1, NULL, &fdset, NULL, &tv) == 1) {
+        socklen_t len = sizeof(so_error);
+        getsockopt(sock, SOL_SOCKET, SO_ERROR, &so_error, &len);
+    }
+    close(sock);
+    return 0 == so_error;
+}
+
+extern "C" int _NSGetExecutablePath(char* buf, uint32_t* bufsize);
+NSString* getAppEXEPath() {
+    char exe[256];
+    uint32_t bufsize = sizeof(exe);
+    _NSGetExecutablePath(exe, &bufsize);
+    return @(exe);
+}
+
+void runAsDaemon(void(^Block)()) {
+    static int fds[2];
+    int flag;
+    pipe(fds);
+    flag = fcntl(fds[0], F_GETFL, 0);
+    fcntl(fds[0], F_SETFL, flag | O_NONBLOCK);
+    flag = fcntl(fds[1], F_GETFL, 0);
+    fcntl(fds[1], F_SETFL, flag | O_NONBLOCK);
+    int forkpid = fork();
+    if (forkpid < 0) {
+        return;
+    } else if (forkpid > 0) { // father
+        return;
+    }
+    setsid();
+    chdir("/");
+    umask(0);
+    int null_in = open("/dev/null", O_RDONLY);
+    int null_out = open("/dev/null", O_WRONLY);
+    dup2(null_in, STDIN_FILENO);
+    dup2(null_out, STDOUT_FILENO);
+    dup2(null_out, STDERR_FILENO);
+    Block();
+}
+
+void Alert(NSString* title, NSString* msg, CFTimeInterval tmout) {
+    if ([NSThread isMainThread]) {
+        CFUserNotificationDisplayAlert(tmout, kCFUserNotificationPlainAlertLevel, nil, nil, nil, (__bridge CFStringRef)msg, (__bridge CFStringRef)title, CFSTR("OK"), nil, nil, nil);
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            CFUserNotificationDisplayAlert(tmout, kCFUserNotificationPlainAlertLevel, nil, nil, nil, (__bridge CFStringRef)msg, (__bridge CFStringRef)title, CFSTR("OK"), nil, nil, nil);
+        });
+    }
 }
 
 

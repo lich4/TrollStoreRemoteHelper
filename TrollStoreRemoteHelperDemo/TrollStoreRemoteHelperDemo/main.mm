@@ -2,7 +2,7 @@
 #import <Foundation/Foundation.h>
 
 static NSString* log_prefix = @"TrollStoreRemoteHelper";
-
+/*
 @interface MainWin : NSObject
 + (instancetype)inst;
 - (instancetype)init;
@@ -66,15 +66,6 @@ static NSString* log_prefix = @"TrollStoreRemoteHelper";
 }
 @end
 
-int main(int argc, char * argv[]) {
-    NSString * appDelegateClassName;
-    @autoreleasepool {
-        appDelegateClassName = NSStringFromClass([AppDelegate class]);
-    }
-    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
-}
-
-
 @implementation MainWin
 + (instancetype)inst {
     static dispatch_once_t pred = 0;
@@ -102,4 +93,35 @@ int main(int argc, char * argv[]) {
     }
 }
 @end
+*/
+
+#include "utils.h"
+int main(int argc, char * argv[]) {
+    @autoreleasepool {
+        NSLog(@"testaaa start %d", argc);
+        if (argc == 1) { // 常规启动
+            //[NSThread sleepForTimeInterval:1.0];
+            NSString* stdOut = nil;
+            NSString* stdErr = nil;
+            spawnRoot(@(argv[0]), @[@"test"], &stdOut, &stdErr);
+            //NSLog(@"testaaa out=%@ err=%@", stdOut, stdErr);
+            [NSTimer timerWithTimeInterval:3.0 repeats:YES block:^(NSTimer* timer) {
+                NSLog(@"parent alive");
+            }];
+            [[NSRunLoop mainRunLoop] run];
+            //NSString* appDelegateClassName;
+            //appDelegateClassName = NSStringFromClass([AppDelegate class]);
+            //return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+        } else {
+            [NSTimer timerWithTimeInterval:3.0 repeats:YES block:^(NSTimer* timer) {
+                NSLog(@"child alive");
+            }];
+            [[NSRunLoop mainRunLoop] run];
+        }
+    }
+}
+
+
+
+
 

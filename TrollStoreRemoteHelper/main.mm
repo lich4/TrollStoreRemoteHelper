@@ -7,7 +7,7 @@
 #import <WebKit/WebKit.h> // 如果使用UIWebView,TrollStore安装IPA后无法显示Web页面,整个是灰的(普通安装没该问题的),bug?
 #endif
 
-static NSString* log_prefix = @"TrollStoreRemoteHelper";
+static NSString* log_prefix = @"TrollStoreRemoteLogger";
 
 @interface MainWin : NSObject
 + (instancetype)inst;
@@ -72,14 +72,6 @@ static NSString* log_prefix = @"TrollStoreRemoteHelper";
 }
 @end
 
-int main(int argc, char * argv[]) {
-    NSString * appDelegateClassName;
-    @autoreleasepool {
-        appDelegateClassName = NSStringFromClass([AppDelegate class]);
-    }
-    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
-}
-
 #ifdef USE_WKWEBVIEW
 @interface WebviewDelegate : UIViewController <WKNavigationDelegate>
 #else
@@ -106,17 +98,14 @@ int main(int argc, char * argv[]) {
 #endif
 @end
 
-#import <GCDWebServers/GCDWebServers.h>
-#include "utils.h"
 
-#define G_PORT 1222
+#include "utils.h"
+#import <GCDWebServers/GCDWebServers.h>
+#define GSERV_PORT      1222
+#define GSSHD_PORT      1223
 
 @implementation MainWin {
-    unsigned short port;
     WebviewDelegate* delegate;
-    NSMutableArray* logList;
-    NSString* helper;
-    NSMutableDictionary* pathMap;
 }
 + (instancetype)inst {
     static dispatch_once_t pred = 0;
@@ -129,29 +118,15 @@ int main(int argc, char * argv[]) {
 - (instancetype)init {
     self = super.init;
     self.window = nil;
-    self->logList = [NSMutableArray new];
-    self->port = G_PORT;
-    [self initPath];
-    self->helper = [self findHelper];
     return self;
 }
 - (void)initServer {
-    static GCDWebServer* _webServer = nil;
-    if (_webServer == nil) {
-        _webServer = [GCDWebServer new];
-        NSString* html_root = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"www"];
-        [_webServer addGETHandlerForBasePath:@"/" directoryPath:html_root indexFilename:nil cacheAge:3600 allowRangeRequests:YES];
-        [_webServer addDefaultHandlerForMethod:@"PUT" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
-            int status = [self handlePUT:request.path with:request.data];
-            return [GCDWebServerResponse responseWithStatusCode:status];
-        }];
-        [_webServer addDefaultHandlerForMethod:@"POST" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
-            NSDictionary* jres = [self handlePOST:request.path with:request.text];
-            return [GCDWebServerDataResponse responseWithJSONObject:jres];
-        }];
-        NSString* localIP = getLocalIP();
-        [self addLog:@"TrollStoreRemoteHelper pid=%d listen=%@:%d", getpid(), localIP, self->port];
-        [_webServer startWithPort:self->port bonjourName:nil];
+    static bool serv_inited = false;
+    if (!serv_inited) {
+        serv_inited = true;
+        pid_t pid_serv = -1;
+        int status = spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+        NSLog(@"%@ spawn server status=%d pid=%d", log_prefix, status, pid_serv);
     }
 }
 - (instancetype)initWithWindow:(UIWindow*)window_ {
@@ -178,40 +153,132 @@ int main(int argc, char * argv[]) {
 #else
             web.delegate = self->delegate;
 #endif
-            NSURL* nsurl = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d/index.html", self->port]];
+            NSURL* nsurl = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d/index.html", GSERV_PORT]];
             NSURLRequest* req = [NSURLRequest requestWithURL:nsurl];
             [web loadRequest:req];
         }
         return self;
     }
 }
-- (NSString*)findHelper {
-    NSString* bundlePath = getTrollStoreBundlePath();
-    if (bundlePath == nil) {
-        [self addLog:@"helper not find"];
-        return nil;
-    }
-    NSFileManager* man = [NSFileManager defaultManager];
-    NSString* helper_path = [bundlePath stringByAppendingPathComponent:@"trollstorehelper"];
-    if (![man fileExistsAtPath:helper_path]) {
-        [self addLog:@"helper not find"];
-        return nil;
-    }
-    self->pathMap[@"trollstorehelper"] = helper_path;
-    NSString* ldid_path = [bundlePath stringByAppendingPathComponent:@"ldid"];
-    if (![man fileExistsAtPath:ldid_path]) {
-        self->pathMap[@"ldid"] = ldid_path;
-    }
-    [self addLog:@"helper find: %@", helper_path];
-    return helper_path;
+@end
+
+
+@interface LSApplicationProxy : NSObject
+@property (nonatomic, readonly) NSString* bundleIdentifier;
+@end
+
+@interface LSApplicationWorkspace : NSObject
++ (instancetype)defaultWorkspace;
+- (void)addObserver:(id)observer;
+- (void)removeObserver:(id)observer;
+@end
+
+
+@interface Service: NSObject
++ (instancetype)inst;
+- (instancetype)init;
+- (void)serve;
+@end
+
+@implementation Service {
+    NSMutableArray* logList;
+    NSString* helper;
+    NSString* bid;
+    pid_t pid_sshd;
 }
-- (void)initPath {
-    self->pathMap = [NSMutableDictionary new];
-    NSFileManager* man = [NSFileManager defaultManager];
-    NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"bin"];
-    for (NSString* item in [man contentsOfDirectoryAtPath:binPath error:nil]) {
-        NSString* full = [binPath stringByAppendingPathComponent:item];
-        self->pathMap[item] = full;
++ (instancetype)inst {
+    static dispatch_once_t pred = 0;
+    static Service* inst_ = nil;
+    dispatch_once(&pred, ^{
+        inst_ = [self new];
+    });
+    return inst_;
+}
+- (instancetype)init {
+    @autoreleasepool {
+        self = super.init;
+        self->bid = NSBundle.mainBundle.bundleIdentifier;
+        self->logList = [NSMutableArray new];
+        self->helper = nil;
+        self->pid_sshd = -1;
+        NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot/bin"];
+        addPathEnv(binPath);
+        NSString* trollPath = getTrollStoreBundlePath();
+        if (trollPath == nil) {
+            [self addLog:@"helper not find"];
+            Alert(@"Error", @"helper not find", 10);
+            return self;
+        }
+        NSFileManager* man = [NSFileManager defaultManager];
+        NSString* helper_path = [trollPath stringByAppendingPathComponent:@"trollstorehelper"];
+        if (![man fileExistsAtPath:helper_path]) {
+            [self addLog:@"helper not find2"];
+            Alert(@"Error", @"helper not find2s", 10);
+            return self;
+        }
+        self->helper = helper_path;
+        addPathEnv(trollPath);
+        [self addLog:@"helper find: %@", helper_path];
+        NSLog(@"%@ helper find: %@", log_prefix, helper_path);
+        [self addLog:@"PATH=%s", getenv("PATH")];
+        return self;
+    }
+}
+- (void)applicationsDidUninstall:(NSArray<LSApplicationProxy*>*)list {
+    @autoreleasepool {
+        for (LSApplicationProxy* proxy in list) {
+            if ([proxy.bundleIdentifier isEqualToString:self->bid]) {
+                NSLog(@"%@ uninstalled, exit", log_prefix); // 卸载时系统不能自动杀本进程,需手动退出
+                [LSApplicationWorkspace.defaultWorkspace removeObserver:self];
+                if (self->pid_sshd > 0) {
+                    kill(self->pid_sshd, SIGKILL);
+                }
+                exit(0);
+            }
+        }
+    }
+}
+- (void)serve {
+    @autoreleasepool {
+        NSString* localIP = getLocalIP();
+        if (localIP == nil) {
+            Alert(@"Error", @"ip fetch failed", 10);
+            exit(0);
+        }
+        if (!localPortOpen(GSSHD_PORT)) { // 先启动sshd防止GSERV_PORT端口继承给sshd
+            [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
+            NSString* root_path = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot"];
+            int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_NOWAIT);
+            NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, self->pid_sshd);
+        } else {
+            [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
+        }
+        static GCDWebServer* _webServer = nil;
+        if (_webServer == nil) {
+            if (localPortOpen(GSERV_PORT)) {
+                NSLog(@"%@ already served, exit", log_prefix);
+                exit(0); // 服务已存在,退出
+            }
+            _webServer = [GCDWebServer new];
+            NSString* html_root = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"www"];
+            [_webServer addGETHandlerForBasePath:@"/" directoryPath:html_root indexFilename:nil cacheAge:3600 allowRangeRequests:YES];
+            [_webServer addDefaultHandlerForMethod:@"PUT" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
+                int status = [self handlePUT:request.path with:request.data];
+                return [GCDWebServerResponse responseWithStatusCode:status];
+            }];
+            [_webServer addDefaultHandlerForMethod:@"POST" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
+                NSDictionary* jres = [self handlePOST:request.path with:request.text];
+                return [GCDWebServerDataResponse responseWithJSONObject:jres];
+            }];
+            [self addLog:@"pid=%d listen=%@:%d", getpid(), localIP, GSERV_PORT];
+            NSLog(@"%@ pid=%d listen=%@:%d", log_prefix, getpid(), localIP, GSERV_PORT);
+            BOOL status = [_webServer startWithPort:GSERV_PORT bonjourName:nil];
+            if (!status) {
+                NSLog(@"%@ serve failed, exit", log_prefix);
+                exit(0);
+            }
+            [LSApplicationWorkspace.defaultWorkspace addObserver:self];
+        }
     }
 }
 - (void)addLog:(NSString*)fmt, ... {
@@ -221,7 +288,7 @@ int main(int argc, char * argv[]) {
     NSDateFormatter* dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString* dateStr = [dateFormatter stringFromDate:[NSDate date]];
-    [self->logList addObject:[NSString stringWithFormat:@"%@\t%@", dateStr, log]];
+    [self->logList addObject:[NSString stringWithFormat:@"%@  %@", dateStr, log]];
 }
 - (NSDictionary*)handlePOST:(NSString*)path with:(NSString*)data {
     @autoreleasepool {
@@ -230,33 +297,14 @@ int main(int argc, char * argv[]) {
                 @"status": @0,
                 @"data": logList,
             };
-        } else if ([path isEqualToString:@"/cmd"]) {
-            NSArray* cmd = [data componentsSeparatedByString:@" "];
-            NSString* exe = cmd.firstObject;
-            if (self->pathMap[exe] != nil) {
-                exe = self->pathMap[exe];
-            }
-            NSArray* args = [cmd subarrayWithRange:NSMakeRange(1, cmd.count - 1)];
-            NSString* stdOut = @"";
-            NSString* stdErr = @"";
-            int status = spawnRoot(exe, args, &stdOut, &stdErr);
-            [self addLog:@"cmd=%@ status=%d stdout=%@ stderr=%@", data, status, stdOut, stdErr];
-            return @{
-                @"status": @(status),
-                @"data": stdOut,
-                @"err": stdErr,
-            };
         }
         return @{
             @"status": @-1,
         };
     }
 }
-- (int)handlePUT:(NSString*)path with:(NSData*)data { // for install ipa
+- (int)handlePUT:(NSString*)path with:(NSData*)data { // for upload file or install ipa
     @autoreleasepool {
-        if (self->helper == nil) {
-            return 410;
-        }
         NSString* fileName = [path lastPathComponent];
         NSString* filePath = [NSString stringWithFormat:@"%@/tmp/%@", NSHomeDirectory(), fileName];
         if (![data writeToFile:filePath atomically:YES]) {
@@ -264,14 +312,44 @@ int main(int argc, char * argv[]) {
             return 411;
         }
         [self addLog:@"download success: %@", filePath];
-        int status = spawnRoot(self->helper, @[@"install", filePath], nil, nil); // 需要先卸载吗?
-        if (status != 0) {
-            [self addLog:@"install failed %d: %@", status, fileName];
-            return 412;
+        NSLog(@"%@ download success: %@", log_prefix, filePath);
+        if ([path hasPrefix:@"/install"]) {
+            if (self->helper == nil) {
+                return 410;
+            }
+            int status = spawn(@[@"trollstorehelper", @"install", filePath], nil, nil, nil, SPAWN_FLAG_ROOT); // 需要先卸载吗?
+            if (status != 0) {
+                [self addLog:@"install failed %d: %@", status, fileName];
+                NSLog(@"%@ install failed %d: %@", log_prefix, status, fileName);
+                return 412;
+            }
+            [self addLog:@"install success %@", fileName];
+            NSLog(@"%@ install success %@", log_prefix, fileName);
+        } else if ([path hasPrefix:@"/shell"]) {
+            NSString* stdOut = @"";
+            NSString* stdErr = @"";
+            int status = spawn(@[@"sh", filePath], &stdOut, &stdErr, nil, SPAWN_FLAG_ROOT);
+            [self addLog:@"cmd=%@ status=%d stdout=%@ stderr=%@", data, status, stdOut, stdErr];
         }
-        [self addLog:@"install success %@", fileName];
         return 200;
     }
 }
 @end
+
+int main(int argc, char** argv) {
+    @autoreleasepool {
+        if (argc == 1) {
+            NSString * appDelegateClassName = NSStringFromClass([AppDelegate class]);
+            return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+        }
+        if (0 == strcmp(argv[1], "serve")) {
+            runAsDaemon(^{ // 防止App退出后被杀
+                [Service.inst serve];
+                [NSRunLoop.mainRunLoop run];
+            });
+            return 0;
+        }
+        return -1;
+    }
+}
 

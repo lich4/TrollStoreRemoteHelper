@@ -23,9 +23,14 @@ if [ -z "${CODE_SIGN_ENTITLEMENTS}" ]; then
 fi
 
 if [ ! -f "${CODE_SIGN_ENTITLEMENTS}" ]; then
-	echo "entitlements not exist ${CODE_SIGN_ENTITLEMENTS}"
-	exit 1
+    echo "entitlements not exist ${CODE_SIGN_ENTITLEMENTS}, try another"
+    CODE_SIGN_ENTITLEMENTS=${PROJECT_DIR}/${TARGET_NAME}.entitlements
+    if [ ! -f "${CODE_SIGN_ENTITLEMENTS}" ]; then
+        echo "entitlements not exist ${CODE_SIGN_ENTITLEMENTS}, exit"
+        exit 1
+    fi
 fi
+echo "use entitlements ${CODE_SIGN_ENTITLEMENTS}"
 
 ldid -S${CODE_SIGN_ENTITLEMENTS} ${APP}/${TARGET_NAME}
 rm -rf ${DIR}/${TARGET_NAME}.ipa ${DIR}/Payload
@@ -42,15 +47,11 @@ if [ ! -f ${IPA_PATH} ]; then
 fi
 
 if [ ! -z "${TROLLSTORE_DEVICE_IP}" ]; then
-	curl -v ${TROLLSTORE_DEVICE_IP}:1222 -T ${IPA_PATH}
+	curl -v ${TROLLSTORE_DEVICE_IP}:1222/install/${TARGET_NAME}.ipa -T ${IPA_PATH}
 	if [ ! $? -eq 0 ]; then
 		echo "install failed"
 		exit -1
 	fi
-fi
-
-if [ ! -z "${TROLLSTORE_CMD}" ]; then
-	curl ${TROLLSTORE_DEVICE_IP}:1222/cmd -d "${TROLLSTORE_CMD}"
 fi
 
 exit 0
