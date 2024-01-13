@@ -185,6 +185,7 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
     NSString* helper;
     NSString* bid;
     pid_t pid_sshd;
+    NSString* localIP;
 }
 + (instancetype)inst {
     static dispatch_once_t pred = 0;
@@ -238,6 +239,13 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
         }
     }
 }
+- (void)checkIPChange {
+    NSString* newLocalIP = getLocalIP();
+    if (self->localIP != newLocalIP) {
+        NSLog(@"%@ detect IP change %@, exit", log_prefix, newLocalIP);
+        exit(0);
+    }
+}
 - (void)serve {
     @autoreleasepool {
         NSString* localIP = getLocalIP();
@@ -253,6 +261,7 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
         } else {
             [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
         }
+        self->localIP = localIP;
         static GCDWebServer* _webServer = nil;
         if (_webServer == nil) {
             if (localPortOpen(GSERV_PORT)) {
@@ -278,6 +287,7 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
                 exit(0);
             }
             [LSApplicationWorkspace.defaultWorkspace addObserver:self];
+            [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkIPChange) userInfo:nil repeats:YES];
         }
     }
 }

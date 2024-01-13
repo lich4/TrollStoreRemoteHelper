@@ -27,6 +27,8 @@
                     $("#logger").append(ele);
                 });
                 $("html, body").animate({ scrollTop: $(document).height() }, 100);
+            }).fail(res => {
+                $("body").text("Connect server failed, please restart app");
             });
         }
         $(function() {
