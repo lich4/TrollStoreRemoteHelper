@@ -5,7 +5,12 @@
 &emsp;&emsp;TrollStore需要拷贝IPA到设备然后手动安装，比较麻烦。本工具通过简单的配置XCode就可以自动远程安装IPA。
 这里以TrollStoreRemoteHelperDemo为例展示操作步骤：
 
-1. 用TrollStore安装TrollStoreRemoteHelper.ipa并启动。获取监听IP
+1. 用TrollStore安装TrollStoreRemoteHelper.tipa并启动。获取监听IP
+
+&emsp;&emsp;有朋友用隔空投送可以直接安装tipa, 如果不成功可以尝试如下步骤:
+* 从github release获取tipa下载地址, 如[https://github.com/lich4/TrollStoreRemoteHelper/releases/download/1.3/TrollStoreRemoteHelper.tipa]
+* PC端将该url输入网络剪贴板[https://netcut.cn/], 手机Safari打开网络剪贴板获取到url
+* 复制url, 在TrollStore中选择URL方式安装
    
 ```txt
 2023-12-29 12:54:41 helper find:/varicontainers/Bundle/Applicatice/2FA0E066-E4F1-468D-9CC6-

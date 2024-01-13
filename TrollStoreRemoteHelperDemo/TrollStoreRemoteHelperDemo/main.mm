@@ -1,12 +1,11 @@
-#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
-static NSString* log_prefix = @"TrollStoreRemoteHelper";
-/*
-@interface MainWin : NSObject
+@interface MainWin : UIViewController<WKNavigationDelegate, WKScriptMessageHandler>
 + (instancetype)inst;
 - (instancetype)init;
-- (instancetype)initWithWindow:(UIWindow*)window;
+- (void)initWithWindow:(UIWindow*)window;
 @property(retain) UIWindow* window;
 @end
 
@@ -61,12 +60,11 @@ static NSString* log_prefix = @"TrollStoreRemoteHelper";
 @interface ViewController : UIViewController
 @end
 @implementation ViewController
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 @end
 
-@implementation MainWin
+@implementation MainWin {
+    WKWebView* webview;
+}
 + (instancetype)inst {
     static dispatch_once_t pred = 0;
     static MainWin* inst_ = nil;
@@ -80,48 +78,34 @@ static NSString* log_prefix = @"TrollStoreRemoteHelper";
     self.window = nil;
     return self;
 }
-- (instancetype)initWithWindow:(UIWindow*)window_ {
+- (void)initWithWindow:(UIWindow*)window_ {
     @autoreleasepool {
-        if (self.window == nil) {
-            self.window = window_;
-            CGSize size = UIScreen.mainScreen.bounds.size;
-            UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-            label.text = @"Hello World!!!";
-            [self.window addSubview:label];
+        if (self.window != nil) {
+            return;
         }
-        return self;
+        self.window = window_;
+        CGSize size = UIScreen.mainScreen.bounds.size;
+        NSString* imgpath = [NSString stringWithFormat:@"%@/splash.png", NSBundle.mainBundle.bundlePath];
+        UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+        imgview.image = [UIImage imageWithContentsOfFile:imgpath];
+        [self.window addSubview:imgview];
+        
+        WKWebView* webview = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+        [self.window addSubview:webview];
+        webview.navigationDelegate = self;
+        self->webview = webview;
+        NSString* wwwpath = [NSString stringWithFormat:@"%@/www/index.html", NSBundle.mainBundle.bundlePath];
+        NSURL* url = [NSURL fileURLWithPath:wwwpath];
+        NSURLRequest* req = [NSURLRequest requestWithURL:url];
+        [webview loadRequest:req];
     }
+}
+- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation *)navigation {
+    [self.window bringSubviewToFront:self->webview];
 }
 @end
-*/
 
-#include "utils.h"
 int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        NSLog(@"testaaa start %d", argc);
-        if (argc == 1) { // 常规启动
-            //[NSThread sleepForTimeInterval:1.0];
-            NSString* stdOut = nil;
-            NSString* stdErr = nil;
-            spawnRoot(@(argv[0]), @[@"test"], &stdOut, &stdErr);
-            //NSLog(@"testaaa out=%@ err=%@", stdOut, stdErr);
-            [NSTimer timerWithTimeInterval:3.0 repeats:YES block:^(NSTimer* timer) {
-                NSLog(@"parent alive");
-            }];
-            [[NSRunLoop mainRunLoop] run];
-            //NSString* appDelegateClassName;
-            //appDelegateClassName = NSStringFromClass([AppDelegate class]);
-            //return UIApplicationMain(argc, argv, nil, appDelegateClassName);
-        } else {
-            [NSTimer timerWithTimeInterval:3.0 repeats:YES block:^(NSTimer* timer) {
-                NSLog(@"child alive");
-            }];
-            [[NSRunLoop mainRunLoop] run];
-        }
-    }
+    return UIApplicationMain(argc, argv, nil, @"AppDelegate");
 }
-
-
-
-
 

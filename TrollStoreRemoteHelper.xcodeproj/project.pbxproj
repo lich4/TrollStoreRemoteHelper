@@ -13,7 +13,6 @@
 		185C21832B484B7900E79849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91792B3C41A000A13E65 /* libz.tbd */; };
 		185C21842B484B8B00E79849 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC32E2B3D7F20009B411E /* CoreServices.framework */; };
 		185C21882B48614A00E79849 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91772B3C40B700A13E65 /* UIKit.framework */; };
-		188A4D022B43E673006E227D /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188A4D012B43E673006E227D /* main.mm */; };
 		188C91582B3C238C00A13E65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C91562B3C238C00A13E65 /* Main.storyboard */; };
 		188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 188C91592B3C239000A13E65 /* Assets.xcassets */; };
 		188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */; };
@@ -24,16 +23,6 @@
 		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		188A4D082B43E82A006E227D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 188C91422B3C238C00A13E65 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 188A4CFD2B43E673006E227D;
-			remoteInfo = TrollStoreTweakLoader;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		18101EDC2B49123600424C28 /* CoreServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CoreServices.tbd; sourceTree = "<group>"; };
 		185C21732B46EF4100E79849 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
@@ -42,8 +31,6 @@
 		185C217A2B46EFA700E79849 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		185C217C2B46F0D900E79849 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libxml2.tbd; sourceTree = DEVELOPER_DIR; };
 		188A4CE22B43DD90006E227D /* bin.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = bin.entitlements; sourceTree = "<group>"; };
-		188A4CFE2B43E673006E227D /* TrollStoreTweakLoader.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = TrollStoreTweakLoader.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		188A4D012B43E673006E227D /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollStoreRemoteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		188C91572B3C238C00A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		188C91592B3C239000A13E65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -62,19 +49,13 @@
 		18A6F36A2B42C4E500DD896F /* md-trollstore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "md-trollstore"; sourceTree = "<group>"; };
 		18A705182B3F1EE60064B9EF /* fakeroot */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fakeroot; sourceTree = "<group>"; };
 		18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
+		18B4A1602B5144F900391695 /* lauchctl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = lauchctl.entitlements; sourceTree = "<group>"; };
 		18BDC32E2B3D7F20009B411E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		18BDC3302B3D8771009B411E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FD8BEC2B3FD5720093FB3A /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		188A4CFB2B43E673006E227D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		188C91472B3C238C00A13E65 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -92,21 +73,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		188A4CFF2B43E673006E227D /* TrollStoreTweakLoader */ = {
-			isa = PBXGroup;
-			children = (
-				188A4D012B43E673006E227D /* main.mm */,
-			);
-			path = TrollStoreTweakLoader;
-			sourceTree = "<group>";
-		};
 		188C91412B3C238C00A13E65 = {
 			isa = PBXGroup;
 			children = (
 				18A6F36A2B42C4E500DD896F /* md-trollstore */,
 				18FD8BEC2B3FD5720093FB3A /* Readme.md */,
 				188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */,
-				188A4CFF2B43E673006E227D /* TrollStoreTweakLoader */,
 				188C914B2B3C238C00A13E65 /* Products */,
 				188C916C2B3C28D200A13E65 /* Frameworks */,
 			);
@@ -116,7 +88,6 @@
 			isa = PBXGroup;
 			children = (
 				188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */,
-				188A4CFE2B43E673006E227D /* TrollStoreTweakLoader.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,6 +98,7 @@
 				18A705182B3F1EE60064B9EF /* fakeroot */,
 				188C91742B3C3DF800A13E65 /* www */,
 				18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */,
+				18B4A1602B5144F900391695 /* lauchctl.entitlements */,
 				188A4CE22B43DD90006E227D /* bin.entitlements */,
 				188C91562B3C238C00A13E65 /* Main.storyboard */,
 				188C91592B3C239000A13E65 /* Assets.xcassets */,
@@ -163,23 +135,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		188A4CFD2B43E673006E227D /* TrollStoreTweakLoader */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 188A4D042B43E673006E227D /* Build configuration list for PBXNativeTarget "TrollStoreTweakLoader" */;
-			buildPhases = (
-				188A4CFA2B43E673006E227D /* Sources */,
-				188A4CFB2B43E673006E227D /* Frameworks */,
-				188A4D072B43E7EA006E227D /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = TrollStoreTweakLoader;
-			productName = TrollStoreTweakLoader;
-			productReference = 188A4CFE2B43E673006E227D /* TrollStoreTweakLoader.dylib */;
-			productType = "com.apple.product-type.library.static";
-		};
 		188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 188C91632B3C239000A13E65 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */;
@@ -192,7 +147,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				188A4D092B43E82A006E227D /* PBXTargetDependency */,
 			);
 			name = TrollStoreRemoteHelper;
 			productName = TrollStoreRemoteHelper;
@@ -208,9 +162,6 @@
 				LastUpgradeCheck = 1170;
 				ORGANIZATIONNAME = chaoge;
 				TargetAttributes = {
-					188A4CFD2B43E673006E227D = {
-						CreatedOnToolsVersion = 11.7;
-					};
 					188C91492B3C238C00A13E65 = {
 						CreatedOnToolsVersion = 11.7;
 					};
@@ -230,7 +181,6 @@
 			projectRoot = "";
 			targets = (
 				188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */,
-				188A4CFD2B43E673006E227D /* TrollStoreTweakLoader */,
 			);
 		};
 /* End PBXProject section */
@@ -251,24 +201,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		188A4D072B43E7EA006E227D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "EXE_PATH=${CODESIGNING_FOLDER_PATH}\ncodesign --remove \"${EXE_PATH}\"\nCOPY_EXE_PATH=${PROJECT_DIR}/TrollStoreRemoteHelper/fakeroot/bin/TrollStoreTweakLoader.dylib\ncp -fp ${EXE_PATH} ${COPY_EXE_PATH}\n\n";
-			showEnvVarsInLog = 0;
-		};
 		18B26BB12B3D5B8B0030D75D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -289,14 +221,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		188A4CFA2B43E673006E227D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				188A4D022B43E673006E227D /* main.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		188C91462B3C238C00A13E65 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -307,14 +231,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		188A4D092B43E82A006E227D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 188A4CFD2B43E673006E227D /* TrollStoreTweakLoader */;
-			targetProxy = 188A4D082B43E82A006E227D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		188C91562B3C238C00A13E65 /* Main.storyboard */ = {
@@ -336,52 +252,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		188A4D052B43E673006E227D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YZGT4R4484;
-				EXECUTABLE_EXTENSION = dylib;
-				EXECUTABLE_PREFIX = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
-				MACH_O_TYPE = mh_dylib;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e";
-			};
-			name = Debug;
-		};
-		188A4D062B43E673006E227D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YZGT4R4484;
-				EXECUTABLE_EXTENSION = dylib;
-				EXECUTABLE_PREFIX = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
-				MACH_O_TYPE = mh_dylib;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 arm64e";
-			};
-			name = Release;
-		};
 		188C91612B3C239000A13E65 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -526,11 +396,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/TrollStoreRemoteHelper",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.3;
+				TROLLSTORE_DEVICE_IP = "";
 			};
 			name = Debug;
 		};
@@ -555,26 +425,17 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/TrollStoreRemoteHelper",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.3;
+				TROLLSTORE_DEVICE_IP = "";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		188A4D042B43E673006E227D /* Build configuration list for PBXNativeTarget "TrollStoreTweakLoader" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				188A4D052B43E673006E227D /* Debug */,
-				188A4D062B43E673006E227D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		188C91452B3C238C00A13E65 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

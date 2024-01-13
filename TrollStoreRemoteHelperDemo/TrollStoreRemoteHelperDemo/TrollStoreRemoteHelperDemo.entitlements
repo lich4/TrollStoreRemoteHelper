@@ -1,26 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>get-task-allow</key>
+	<true/>
 	<key>platform-application</key>
 	<true/>
-	<key>application-identifier</key>
-	<string>chaoge.TrollStoreRemoteHelper.demo</string>
-	<key>com.apple.security.exception.files.absolute-path.read-write</key>
-	<array>
-		<string>/</string>
-	</array>
-	<key>com.apple.private.security.no-sandbox</key>
+	<key>task_for_pid-allow</key>
 	<true/>
-	<key>com.apple.private.MobileContainerManager.allowed</key>
+	<key>com.apple.private.security.container-required</key>
+	<false/>
+	<key>com.apple.system-task-ports</key>
 	<true/>
-	<key>com.apple.private.security.container-manager</key>
+	<key>com.apple.system-task-ports.control</key>
 	<true/>
-	<key>com.apple.private.security.storage.AppBundles</key>
-	<true/>
-	<key>com.apple.private.security.storage.AppDataContainers</key>
-	<true/>
-	<key>com.apple.private.persona-mgmt</key>
+	<key>com.apple.private.thread-set-state</key>
 	<true/>
 </dict>
 </plist>
