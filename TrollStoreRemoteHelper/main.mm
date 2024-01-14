@@ -241,8 +241,8 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
 }
 - (void)checkIPChange {
     NSString* newLocalIP = getLocalIP();
-    if (self->localIP != newLocalIP) {
-        NSLog(@"%@ detect IP change %@, exit", log_prefix, newLocalIP);
+    if (![self->localIP isEqualToString:newLocalIP]) {
+        NSLog(@"%@ detect IP change %@ -> %@, exit", log_prefix, self->localIP, newLocalIP);
         exit(0);
     }
 }
