@@ -1,176 +1,53 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
-#define USE_WKWEBVIEW
-
-#ifdef USE_WKWEBVIEW
 #import <WebKit/WebKit.h> // 如果使用UIWebView,TrollStore安装IPA后无法显示Web页面,整个是灰的(普通安装没该问题的),bug?
-#endif
-
-static NSString* log_prefix = @"TrollStoreRemoteLogger";
-
-@interface MainWin : NSObject
-+ (instancetype)inst;
-- (instancetype)init;
-- (instancetype)initWithWindow:(UIWindow*)window;
-@property(retain) UIWindow* window;
-@end
-
-@interface SceneDelegate : UIResponder<UIWindowSceneDelegate>
-@property (strong, nonatomic) UIWindow * window;
-@end
-
-@implementation SceneDelegate
-- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-}
-- (void)sceneDidDisconnect:(UIScene *)scene {
-}
-- (void)sceneWillResignActive:(UIScene *)scene {
-}
-- (void)sceneWillEnterForeground:(UIScene *)scene {
-}
-- (void)sceneDidEnterBackground:(UIScene *)scene {
-}
-- (void)sceneDidBecomeActive:(UIScene *)scene {
-    @autoreleasepool {
-        [MainWin.inst initWithWindow:self.window];
-    }
-}
-- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext*>*)URLContexts {
-}
-@end
-
-@interface AppDelegate : UIResponder<UIApplicationDelegate>
-@property (strong, nonatomic) UIWindow * window;
-@end
-
-@implementation AppDelegate
-@synthesize window = _window;
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
-    @autoreleasepool {
-        return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
-    }
-}
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
-}
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    @autoreleasepool {
-        [MainWin.inst initWithWindow:self.window];
-        return YES;
-    }
-}
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
-    return YES;
-}
-@end
-
-@interface ViewController : UIViewController
-@end
-@implementation ViewController
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-@end
-
-#ifdef USE_WKWEBVIEW
-@interface WebviewDelegate : UIViewController <WKNavigationDelegate>
-#else
-@interface WebviewDelegate : UIViewController <UIWebViewDelegate>
-#endif
-@property(retain) UIWindow* window;
-@property(retain) UIView* webview;
-#ifdef USE_WKWEBVIEW
-- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation *)navigation;
-#else
-- (void)webViewDidFinishLoad:(UIWebView *)webView;
-#endif
-@end
-
-@implementation WebviewDelegate
-#ifdef USE_WKWEBVIEW
-- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation *)navigation {
-    [self.window bringSubviewToFront:self.webview];
-}
-#else
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [self.window bringSubviewToFront:self.webview];
-}
-#endif
-@end
-
-
-#include "utils.h"
 #import <GCDWebServers/GCDWebServers.h>
+#include "utils.h"
+
+#define PRODUCT         "TrollStoreRemoteHelper"
 #define GSERV_PORT      1222
 #define GSSHD_PORT      1223
 
-@implementation MainWin {
-    WebviewDelegate* delegate;
+static NSString* log_prefix = @(PRODUCT "Logger");
+
+
+@interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, WKNavigationDelegate>
+@property(strong, nonatomic) UIWindow* window;
+@property(retain) WKWebView* webview;
+@end
+
+@implementation AppDelegate
+static UIWindow* _g_wind = nil;
+static AppDelegate* _g_app = nil;
+- (void)sceneWillEnterForeground:(UIScene*)scene API_AVAILABLE(ios(13.0)) {
+    _g_wind = self.window;
 }
-+ (instancetype)inst {
-    static dispatch_once_t pred = 0;
-    static MainWin* inst_ = nil;
-    dispatch_once(&pred, ^{
-        inst_ = [self new];
-    });
-    return inst_;
+- (BOOL)application:(UIApplication*)application willFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
+    _g_wind = self.window;
+    return YES;
 }
-- (instancetype)init {
-    self = super.init;
-    self.window = nil;
-    return self;
-}
-- (void)initServer {
-    static bool serv_inited = false;
-    if (!serv_inited) {
-        serv_inited = true;
-        pid_t pid_serv = -1;
-        int status = spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
-        NSLog(@"%@ spawn server status=%d pid=%d", log_prefix, status, pid_serv);
-    }
-}
-- (instancetype)initWithWindow:(UIWindow*)window_ {
+- (void)viewDidAppear:(BOOL)animated {
     @autoreleasepool {
-        [self initServer];
-        if (self.window == nil) {
-            self.window = window_;
-            CGSize size = UIScreen.mainScreen.bounds.size;
-            NSString* imgpath = [NSString stringWithFormat:@"%@/splash.png", NSBundle.mainBundle.bundlePath];
-            UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-            imgview.image = [UIImage imageWithContentsOfFile:imgpath];
-            [self.window addSubview:imgview];
-#ifdef USE_WKWEBVIEW
-            WKWebView* web = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-#else
-            UIWebView* web = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-#endif
-            [self.window addSubview:web];
-            self->delegate = [WebviewDelegate new];
-            self->delegate.window = self.window;
-            self->delegate.webview = web;
-#ifdef USE_WKWEBVIEW
-            web.navigationDelegate = self->delegate;
-#else
-            web.delegate = self->delegate;
-#endif
-            NSURL* nsurl = [NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:%d/index.html", GSERV_PORT]];
-            NSURLRequest* req = [NSURLRequest requestWithURL:nsurl];
-            [web loadRequest:req];
-        }
-        return self;
+        [super viewDidAppear:animated];
+        self.window = _g_wind;
+        _g_app = self;
+        
+        CGSize size = UIScreen.mainScreen.bounds.size;
+        WKWebViewConfiguration* conf = [WKWebViewConfiguration new];
+        WKWebView* webview = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height) configuration:conf];
+        webview.navigationDelegate = self;
+        self.webview = webview;
+
+        NSString* wwwpath = [NSString stringWithFormat:@"http://127.0.0.1:%d", GSERV_PORT];
+        NSURL* url = [NSURL URLWithString:wwwpath];
+        NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];;
+        [webview loadRequest:req];
     }
 }
-@end
-
-
-@interface LSApplicationProxy : NSObject
-@property (nonatomic, readonly) NSString* bundleIdentifier;
-@end
-
-@interface LSApplicationWorkspace : NSObject
-+ (instancetype)defaultWorkspace;
-- (void)addObserver:(id)observer;
-- (void)removeObserver:(id)observer;
+- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation {
+    [self.window addSubview:webView];
+    [self.window bringSubviewToFront:webView];
+}
 @end
 
 
@@ -256,7 +133,7 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
         if (!localPortOpen(GSSHD_PORT)) { // 先启动sshd防止GSERV_PORT端口继承给sshd
             [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
             NSString* root_path = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot"];
-            int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_NOWAIT);
+            int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
             NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, self->pid_sshd);
         } else {
             [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
@@ -270,7 +147,7 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
             }
             _webServer = [GCDWebServer new];
             NSString* html_root = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"www"];
-            [_webServer addGETHandlerForBasePath:@"/" directoryPath:html_root indexFilename:nil cacheAge:3600 allowRangeRequests:YES];
+            [_webServer addGETHandlerForBasePath:@"/" directoryPath:html_root indexFilename:@"index.html" cacheAge:1 allowRangeRequests:YES];
             [_webServer addDefaultHandlerForMethod:@"PUT" requestClass:GCDWebServerDataRequest.class processBlock:^GCDWebServerResponse*(GCDWebServerDataRequest* request) {
                 int status = [self handlePUT:request.path with:request.data];
                 return [GCDWebServerResponse responseWithStatusCode:status];
@@ -346,18 +223,24 @@ static NSString* log_prefix = @"TrollStoreRemoteLogger";
 }
 @end
 
+#include <iostream>
+
 int main(int argc, char** argv) {
     @autoreleasepool {
         if (argc == 1) {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                if (!localPortOpen(GSERV_PORT)) {
+                    pid_t pid_serv = -1;
+                    int status = spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+                    NSLog(@"%@ spawn server status=%d pid=%d", log_prefix, status, pid_serv);
+                }
+            });
             NSString * appDelegateClassName = NSStringFromClass([AppDelegate class]);
             return UIApplicationMain(argc, argv, nil, appDelegateClassName);
         }
         if (0 == strcmp(argv[1], "serve")) {
-            runAsDaemon(^{ // 防止App退出后被杀
-                [Service.inst serve];
-                [NSRunLoop.mainRunLoop run];
-            });
-            return 0;
+            [Service.inst serve];
+            [NSRunLoop.mainRunLoop run];
         }
         return -1;
     }

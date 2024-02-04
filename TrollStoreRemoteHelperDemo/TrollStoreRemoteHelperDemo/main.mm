@@ -2,110 +2,48 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-@interface MainWin : UIViewController<WKNavigationDelegate, WKScriptMessageHandler>
-+ (instancetype)inst;
-- (instancetype)init;
-- (void)initWithWindow:(UIWindow*)window;
-@property(retain) UIWindow* window;
-@end
-
-@interface SceneDelegate : UIResponder<UIWindowSceneDelegate>
-@property (strong, nonatomic) UIWindow * window;
-@end
-
-@implementation SceneDelegate
-- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-}
-- (void)sceneDidDisconnect:(UIScene *)scene {
-}
-- (void)sceneWillResignActive:(UIScene *)scene {
-}
-- (void)sceneWillEnterForeground:(UIScene *)scene {
-}
-- (void)sceneDidEnterBackground:(UIScene *)scene {
-}
-- (void)sceneDidBecomeActive:(UIScene *)scene {
-    @autoreleasepool {
-        [MainWin.inst initWithWindow:self.window];
-    }
-}
-- (void)scene:(UIScene *)scene openURLContexts:(NSSet<UIOpenURLContext*>*)URLContexts {
-}
-@end
-
-@interface AppDelegate : UIResponder<UIApplicationDelegate>
-@property (strong, nonatomic) UIWindow * window;
+@interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, WKNavigationDelegate>
+@property(strong, nonatomic) UIWindow* window;
+@property(retain) WKWebView* webview;
 @end
 
 @implementation AppDelegate
-@synthesize window = _window;
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
-    @autoreleasepool {
-        return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
-    }
+static UIWindow* _g_wind = nil;
+static AppDelegate* _g_app = nil;
+- (void)sceneWillEnterForeground:(UIScene*)scene API_AVAILABLE(ios(13.0)) {
+    _g_wind = self.window;
 }
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
-}
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    @autoreleasepool {
-        [MainWin.inst initWithWindow:self.window];
-        return YES;
-    }
-}
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+- (BOOL)application:(UIApplication*)application willFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id>*)launchOptions {
+    _g_wind = self.window;
     return YES;
 }
-@end
-
-@interface ViewController : UIViewController
-@end
-@implementation ViewController
-@end
-
-@implementation MainWin {
-    WKWebView* webview;
-}
-+ (instancetype)inst {
-    static dispatch_once_t pred = 0;
-    static MainWin* inst_ = nil;
-    dispatch_once(&pred, ^{
-        inst_ = [self new];
-    });
-    return inst_;
-}
-- (instancetype)init {
-    self = super.init;
-    self.window = nil;
-    return self;
-}
-- (void)initWithWindow:(UIWindow*)window_ {
+- (void)viewDidAppear:(BOOL)animated {
     @autoreleasepool {
-        if (self.window != nil) {
-            return;
-        }
-        self.window = window_;
-        CGSize size = UIScreen.mainScreen.bounds.size;
-        NSString* imgpath = [NSString stringWithFormat:@"%@/splash.png", NSBundle.mainBundle.bundlePath];
-        UIImageView* imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-        imgview.image = [UIImage imageWithContentsOfFile:imgpath];
-        [self.window addSubview:imgview];
+        [super viewDidAppear:animated];
+        self.window = _g_wind;
+        _g_app = self;
         
-        WKWebView* webview = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-        [self.window addSubview:webview];
+        CGSize size = UIScreen.mainScreen.bounds.size;
+        WKWebViewConfiguration* conf = [WKWebViewConfiguration new];
+        WKWebView* webview = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height) configuration:conf];
         webview.navigationDelegate = self;
-        self->webview = webview;
+        self.webview = webview;
+
         NSString* wwwpath = [NSString stringWithFormat:@"%@/www/index.html", NSBundle.mainBundle.bundlePath];
-        NSURL* url = [NSURL fileURLWithPath:wwwpath];
-        NSURLRequest* req = [NSURLRequest requestWithURL:url];
+        NSURL* url = [NSURL URLWithString:wwwpath];
+        NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];;
         [webview loadRequest:req];
     }
 }
-- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation *)navigation {
-    [self.window bringSubviewToFront:self->webview];
+- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation {
+    [self.window addSubview:webView];
+    [self.window bringSubviewToFront:webView];
 }
 @end
 
 int main(int argc, char * argv[]) {
-    return UIApplicationMain(argc, argv, nil, @"AppDelegate");
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, @"AppDelegate");
+    }
 }
 

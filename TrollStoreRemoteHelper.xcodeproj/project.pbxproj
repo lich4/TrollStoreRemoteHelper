@@ -20,7 +20,7 @@
 		188C91762B3C3F9300A13E65 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 188C91742B3C3DF800A13E65 /* www */; };
 		188CD97A2B48682D004BCD6F /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C916D2B3C28D300A13E65 /* GCDWebServers.framework */; };
 		18A7051A2B3F1EF00064B9EF /* fakeroot in Resources */ = {isa = PBXBuildFile; fileRef = 18A705182B3F1EE60064B9EF /* fakeroot */; };
-		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; };
+		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +50,10 @@
 		18A705182B3F1EE60064B9EF /* fakeroot */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fakeroot; sourceTree = "<group>"; };
 		18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
 		18B4A1602B5144F900391695 /* lauchctl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = lauchctl.entitlements; sourceTree = "<group>"; };
+		18B7386B2B5FFC0F008E7A08 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		18B7386D2B5FFC13008E7A08 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
+		18B7386F2B5FFC16008E7A08 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
+		18B738712B5FFC23008E7A08 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		18BDC32E2B3D7F20009B411E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		18BDC3302B3D8771009B411E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		18FD8BEC2B3FD5720093FB3A /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
@@ -115,6 +119,10 @@
 		188C916C2B3C28D200A13E65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18B738712B5FFC23008E7A08 /* WebKit.framework */,
+				18B7386F2B5FFC16008E7A08 /* CFNetwork.framework */,
+				18B7386D2B5FFC13008E7A08 /* libz.tbd */,
+				18B7386B2B5FFC0F008E7A08 /* CoreServices.framework */,
 				185C217C2B46F0D900E79849 /* libxml2.tbd */,
 				185C217A2B46EFA700E79849 /* UIKit.framework */,
 				185C21782B46EF7700E79849 /* CoreServices.framework */,
@@ -217,6 +225,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "$PWD/md-trollstore\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -306,12 +315,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
+				TROLLSTORE_SUID = "";
 				VALID_ARCHS = arm64;
 			};
 			name = Debug;
@@ -364,12 +374,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
+				TROLLSTORE_SUID = "";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = arm64;
 			};
@@ -383,7 +394,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YZGT4R4484;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/framework,
+				);
+				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/framework,
 				);
@@ -399,8 +415,10 @@
 				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TROLLSTORE_DEVICE_IP = "";
+				TROLLSTORE_SUID = YES;
 			};
 			name = Debug;
 		};
@@ -412,7 +430,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YZGT4R4484;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/framework,
+				);
+				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/framework,
 				);
@@ -428,8 +451,10 @@
 				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TROLLSTORE_DEVICE_IP = "";
+				TROLLSTORE_SUID = YES;
 			};
 			name = Release;
 		};

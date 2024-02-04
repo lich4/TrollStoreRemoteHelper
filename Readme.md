@@ -47,7 +47,8 @@ ECFFE318F937/tmp/TroIStoreRemoteHelperDemo.ipa
 
 ## 远程shell
 
-&emsp;&emsp;为便于在非越狱下进行基本操作,本工具提供非越狱ssh功能
+&emsp;&emsp;为便于在非越狱下进行基本操作,本工具提供非越狱ssh功能. 
+目前无法在iOS16 arm64e下使用, 因为fork后进程会崩溃, 由于笔者缺少开发环境目前还无法修复
 
 ```txt
 系统自带: df ps mount umount

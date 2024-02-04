@@ -12,12 +12,25 @@
 #import <Foundation/Foundation.h>
 
 #include <arpa/inet.h>
+#include <dlfcn.h>
 #include <ifaddrs.h>
 #include <netinet/in.h>
 #include <spawn.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+
+
+@interface LSApplicationProxy : NSObject
+@property (nonatomic, readonly) NSString* bundleIdentifier;
+@end
+
+@interface LSApplicationWorkspace : NSObject
++ (instancetype)defaultWorkspace;
+- (void)addObserver:(id)observer;
+- (void)removeObserver:(id)observer;
+@end
+
 
 // borrow from TSUtils
 enum {
@@ -32,5 +45,6 @@ void addPathEnv(NSString* path, BOOL tail=YES);
 BOOL localPortOpen(int port);
 NSString* getAppEXEPath();
 void runAsDaemon(void(^Block)());
+int platformize_me();
 void Alert(NSString* title, NSString* msg, CFTimeInterval tmout);
 #endif /* utils_h */

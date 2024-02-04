@@ -65,14 +65,14 @@ int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, in
         posix_spawn_file_actions_adddup2(&action, out[1], STDOUT_FILENO);
         posix_spawn_file_actions_addclose(&action, out[0]);
     }
-    pid_t task_pid;
+    pid_t task_pid = -1;
     pid_t* task_pid_ptr = &task_pid;
     if (pidPtr != 0) {
         task_pid_ptr = pidPtr;
     }
     int status = -200;
     int spawnError = posix_spawnp(task_pid_ptr, [file UTF8String], &action, &attr, (char* const*)argsC, environ);
-    NSLog(@"posix_spawn %@ %d -> %d", args.firstObject, getpid(), task_pid);
+    NSLog(@"posix_spawn %@ ret=%d -> %d", args.firstObject, spawnError, task_pid);
     posix_spawnattr_destroy(&attr);
     for (NSUInteger i = 0; i < argCount; i++) {
         free(argsC[i]);
@@ -260,6 +260,32 @@ void runAsDaemon(void(^Block)()) {
     Block();
 }
 
+int platformize_me() {
+    int ret = 0;
+    #define FLAG_PLATFORMIZE (1 << 1)
+    void* h_jailbreak = dlopen("/usr/lib/libjailbreak.dylib", RTLD_LAZY);
+    if (h_jailbreak) {
+        const char* dlsym_error = 0;
+        dlerror();
+        typedef void (*fix_entitle_prt_t)(pid_t pid, uint32_t what);
+        fix_entitle_prt_t jb_oneshot_entitle_now = (fix_entitle_prt_t)dlsym(h_jailbreak, "jb_oneshot_entitle_now");
+        dlsym_error = dlerror();
+        if (jb_oneshot_entitle_now && !dlsym_error) {
+            jb_oneshot_entitle_now(getpid(), FLAG_PLATFORMIZE);
+        }
+        dlerror();
+        typedef void (*fix_setuid_prt_t)(pid_t pid);
+        fix_setuid_prt_t jb_oneshot_fix_setuid_now = (fix_setuid_prt_t)dlsym(h_jailbreak, "jb_oneshot_fix_setuid_now");
+        dlsym_error = dlerror();
+        if (jb_oneshot_fix_setuid_now && !dlsym_error) {
+            jb_oneshot_fix_setuid_now(getpid());
+        }
+    }
+    ret += setuid(0);
+    ret += setgid(0);
+    return ret;
+}
+
 void Alert(NSString* title, NSString* msg, CFTimeInterval tmout) {
     if ([NSThread isMainThread]) {
         CFUserNotificationDisplayAlert(tmout, kCFUserNotificationPlainAlertLevel, nil, nil, nil, (__bridge CFStringRef)msg, (__bridge CFStringRef)title, CFSTR("OK"), nil, nil, nil);
@@ -269,5 +295,6 @@ void Alert(NSString* title, NSString* msg, CFTimeInterval tmout) {
         });
     }
 }
+
 
 
