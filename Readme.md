@@ -3,7 +3,7 @@
 ## 基本用法
 
 &emsp;&emsp;TrollStore需要拷贝IPA到设备然后手动安装，比较麻烦。本工具通过简单的配置XCode就可以自动远程安装IPA。
-这里以TrollStoreRemoteHelperDemo为例展示操作步骤：
+这里以TrollStor eRemoteHelperDemo为例展示操作步骤：
 
 1. 用TrollStore安装TrollStoreRemoteHelper.tipa并启动。获取监听IP
 
@@ -48,7 +48,6 @@ ECFFE318F937/tmp/TroIStoreRemoteHelperDemo.ipa
 ## 远程shell
 
 &emsp;&emsp;为便于在非越狱下进行基本操作,本工具提供非越狱ssh功能. 
-目前无法在iOS16 arm64e下使用, 因为fork后进程会崩溃, 由于笔者缺少开发环境目前还无法修复
 
 ```txt
 系统自带: df ps mount umount

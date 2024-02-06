@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 
+extern NSString* log_prefix;
 
 @interface LSApplicationProxy : NSObject
 @property (nonatomic, readonly) NSString* bundleIdentifier;
@@ -36,8 +37,9 @@
 enum {
     SPAWN_FLAG_ROOT     = 1,
     SPAWN_FLAG_NOWAIT   = 2,
+    SPAWN_FLAG_SUSPEND  = 4,
 };
-int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, int flag);
+int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, int flag, NSDictionary* param=nil);
 NSString* getTrollStoreBundlePath();
 
 NSString* getLocalIP();

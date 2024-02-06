@@ -28,27 +28,29 @@ NSString* getNSStringFromFile(int fd) {
     }
     while ((num_read = read(fd, &c, sizeof(c)))) {
         [ms appendString:[NSString stringWithFormat:@"%c", c]];
-        if(c == '\n') {
-            break;
-        }
+        //if(c == '\n') {
+        //    break;
+        //}
     }
     return ms.copy;
 }
 
-int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdErr) {
-    NSMutableArray* argsM = args.mutableCopy ?: [NSMutableArray new];
-    [argsM insertObject:path atIndex:0];
-    NSUInteger argCount = [argsM count];
+extern char** environ;
+int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, int flag) {
+    NSString* file = args.firstObject;
+    NSUInteger argCount = [args count];
     char **argsC = (char **)malloc((argCount + 1) * sizeof(char*));
     for (NSUInteger i = 0; i < argCount; i++) {
-        argsC[i] = strdup([[argsM objectAtIndex:i] UTF8String]);
+        argsC[i] = strdup([[args objectAtIndex:i] UTF8String]);
     }
     argsC[argCount] = NULL;
     posix_spawnattr_t attr;
     posix_spawnattr_init(&attr);
-    posix_spawnattr_set_persona_np(&attr, 99, POSIX_SPAWN_PERSONA_FLAGS_OVERRIDE);
-    posix_spawnattr_set_persona_uid_np(&attr, 0);
-    posix_spawnattr_set_persona_gid_np(&attr, 0);
+    if ((flag & SPAWN_FLAG_ROOT) != 0) {
+        posix_spawnattr_set_persona_np(&attr, 99, POSIX_SPAWN_PERSONA_FLAGS_OVERRIDE);
+        posix_spawnattr_set_persona_uid_np(&attr, 0);
+        posix_spawnattr_set_persona_gid_np(&attr, 0);
+    }
     posix_spawn_file_actions_t action;
     posix_spawn_file_actions_init(&action);
     int outErr[2];
@@ -63,17 +65,25 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
         posix_spawn_file_actions_adddup2(&action, out[1], STDOUT_FILENO);
         posix_spawn_file_actions_addclose(&action, out[0]);
     }
-    pid_t task_pid;
+    pid_t task_pid = -1;
+    pid_t* task_pid_ptr = &task_pid;
+    if (pidPtr != 0) {
+        task_pid_ptr = pidPtr;
+    }
     int status = -200;
-    int spawnError = posix_spawn(&task_pid, [path UTF8String], &action, &attr, (char* const*)argsC, NULL);
+    int spawnError = posix_spawnp(task_pid_ptr, [file UTF8String], &action, &attr, (char* const*)argsC, environ);
+    NSLog(@"%@ posix_spawn %@ ret=%d -> %d", log_prefix, args.firstObject, spawnError, task_pid);
     posix_spawnattr_destroy(&attr);
     for (NSUInteger i = 0; i < argCount; i++) {
         free(argsC[i]);
     }
     free(argsC);
     if(spawnError != 0) {
-        NSLog(@"posix_spawn error %d\n", spawnError);
+        NSLog(@"%@ posix_spawn error %d\n", log_prefix, spawnError);
         return spawnError;
+    }
+    if ((flag & SPAWN_FLAG_NOWAIT) != 0) {
+        return 0;
     }
     __block volatile BOOL _isRunning = YES;
     NSMutableString* outString = [NSMutableString new];
@@ -103,7 +113,7 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
     }
     do {
         if (waitpid(task_pid, &status, 0) != -1) {
-            NSLog(@"Child status %d", WEXITSTATUS(status));
+            NSLog(@"%@ Child status %d", log_prefix, WEXITSTATUS(status));
         } else {
             perror("waitpid");
             _isRunning = NO;
@@ -118,7 +128,6 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
         if(stdErr) {
             close(outErr[1]);
         }
-        // wait for logging queue to finish
         dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         if(stdOut) {
             *stdOut = outString.copy;
@@ -130,52 +139,11 @@ int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdEr
     return WEXITSTATUS(status);
 }
 
-
-NSString* getTrollStoreBundlePath() {
-    NSString* appContainersPath = @"/var/containers/Bundle/Application";
-    NSError* error;
-    NSArray* containers = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:appContainersPath error:&error];
-    if (error) {
-        NSLog(@"error getting app bundles paths %@", error);
-    }
-    if (!containers) {
-        return nil;
-    }
-    for(NSString* container in containers) {
-        NSString* containerPath = [appContainersPath stringByAppendingPathComponent:container];
-        BOOL isDirectory = NO;
-        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:containerPath isDirectory:&isDirectory];
-        if (exists && isDirectory) {
-            NSString* trollStoreApp = [containerPath stringByAppendingPathComponent:@"TrollStore.app"];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:trollStoreApp]) {
-                return trollStoreApp;
-            }
-        }
-    }
-    return nil;
+extern "C" int _NSGetExecutablePath(char* buf, uint32_t* bufsize);
+NSString* getAppEXEPath() {
+    char exe[256];
+    uint32_t bufsize = sizeof(exe);
+    _NSGetExecutablePath(exe, &bufsize);
+    return @(exe);
 }
-
-
-
-NSString* getLocalIP() { // 获取wifi ipv4
-    NSString* result = nil;
-    struct ifaddrs* interfaces = 0;
-    struct ifaddrs* temp_addr = 0;
-    if (0 == getifaddrs(&interfaces)) {
-        temp_addr = interfaces;
-        while(temp_addr != NULL) {
-            if(temp_addr->ifa_addr->sa_family == AF_INET) {
-                if(!strcmp(temp_addr->ifa_name, "en0")) {
-                    char* ip = inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr);
-                    result = @(ip);
-                    break;
-                }
-            }
-            temp_addr = temp_addr->ifa_next;
-        }
-        freeifaddrs(interfaces);
-    }
-    return result;
-}
-
 

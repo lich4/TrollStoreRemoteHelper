@@ -19,9 +19,13 @@
 #include <sys/socket.h>
 
 // borrow from TSUtils
-int spawnRoot(NSString* path, NSArray* args, NSString** stdOut, NSString** stdErr);
-NSString* getTrollStoreBundlePath();
+enum {
+    SPAWN_FLAG_ROOT     = 1,
+    SPAWN_FLAG_NOWAIT   = 2,
+};
+int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, int flag);
+NSString* getAppEXEPath();
 
-NSString* getLocalIP();
+extern NSString* log_prefix;
 
 #endif /* utils_h */

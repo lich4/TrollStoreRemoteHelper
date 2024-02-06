@@ -1,6 +1,6 @@
-#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <WebKit/WebKit.h> // 如果使用UIWebView,TrollStore安装IPA后无法显示Web页面,整个是灰的(普通安装没该问题的),bug?
+#import <UIKit/UIKit.h>
+
 #import <GCDWebServers/GCDWebServers.h>
 #include "utils.h"
 
@@ -8,17 +8,18 @@
 #define GSERV_PORT      1222
 #define GSSHD_PORT      1223
 
-static NSString* log_prefix = @(PRODUCT "Logger");
+NSString* log_prefix = @(PRODUCT "Logger");
 
 
-@interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, WKNavigationDelegate>
+@interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, UIWebViewDelegate>
 @property(strong, nonatomic) UIWindow* window;
-@property(retain) WKWebView* webview;
+@property(retain) UIWebView* webview;
 @end
 
 @implementation AppDelegate
 static UIWindow* _g_wind = nil;
 static AppDelegate* _g_app = nil;
+static BOOL _webview_inited = NO;
 - (void)sceneWillEnterForeground:(UIScene*)scene API_AVAILABLE(ios(13.0)) {
     _g_wind = self.window;
 }
@@ -33,20 +34,28 @@ static AppDelegate* _g_app = nil;
         _g_app = self;
         
         CGSize size = UIScreen.mainScreen.bounds.size;
-        WKWebViewConfiguration* conf = [WKWebViewConfiguration new];
-        WKWebView* webview = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height) configuration:conf];
-        webview.navigationDelegate = self;
+        // 从WKWebView换UIWebView: 巨魔+越狱共存环境下签名问题导致delegate不生效而黑屏
+        UIWebView* webview = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+        webview.delegate = self;
         self.webview = webview;
 
         NSString* wwwpath = [NSString stringWithFormat:@"http://127.0.0.1:%d", GSERV_PORT];
         NSURL* url = [NSURL URLWithString:wwwpath];
-        NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];;
+        NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];
         [webview loadRequest:req];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            if (!_webview_inited) { // 巨魔+越狱共存环境下因签名问题导致delegate不生效而黑屏
+                [self.window addSubview:webview];
+                [self.window bringSubviewToFront:webview];
+                _webview_inited = YES;
+            }
+        });
     }
 }
-- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation {
-    [self.window addSubview:webView];
-    [self.window bringSubviewToFront:webView];
+- (void)webViewDidFinishLoad:(UIWebView*)webview {
+    [self.window addSubview:webview];
+    [self.window bringSubviewToFront:webview];
+    _webview_inited = YES;
 }
 @end
 
@@ -133,7 +142,12 @@ static AppDelegate* _g_app = nil;
         if (!localPortOpen(GSSHD_PORT)) { // 先启动sshd防止GSERV_PORT端口继承给sshd
             [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
             NSString* root_path = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot"];
-            int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+            NSDictionary* param = @{
+                @"cwd": root_path,
+            };
+            //int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+            // dropbear使用fork,不兼容16.x+arm64e; sshdog使用posix_spawn,兼容性更好
+            int status = spawn(@[@"sshdog"], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT, param);
             NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, self->pid_sshd);
         } else {
             [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
@@ -223,7 +237,11 @@ static AppDelegate* _g_app = nil;
 }
 @end
 
-#include <iostream>
+NSString* getCwd() {
+    char cwd[PATH_MAX];
+    getcwd(cwd, sizeof(cwd));
+    return @(cwd);
+}
 
 int main(int argc, char** argv) {
     @autoreleasepool {
@@ -235,10 +253,12 @@ int main(int argc, char** argv) {
                     NSLog(@"%@ spawn server status=%d pid=%d", log_prefix, status, pid_serv);
                 }
             });
-            NSString * appDelegateClassName = NSStringFromClass([AppDelegate class]);
-            return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+            return UIApplicationMain(argc, argv, nil, @"AppDelegate");
         }
         if (0 == strcmp(argv[1], "serve")) {
+            NSLog(@"%@ serve cwd=%@", log_prefix, getCwd());
+            signal(SIGHUP, SIG_IGN);
+            signal(SIGTERM, SIG_IGN); // 防止App被Kill以后daemon退出
             [Service.inst serve];
             [NSRunLoop.mainRunLoop run];
         }
@@ -246,3 +266,5 @@ int main(int argc, char** argv) {
     }
 }
 
+
+// todo 增加posix_spawn ssh

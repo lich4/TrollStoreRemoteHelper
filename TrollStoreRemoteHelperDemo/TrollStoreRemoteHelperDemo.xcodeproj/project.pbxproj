@@ -10,14 +10,35 @@
 		182C81FD2B526134008E7A56 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; };
 		182C81FE2B526137008E7A56 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91772B3C40B700A13E65 /* UIKit.framework */; };
 		182C82002B5261A2008E7A56 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 182C81FF2B52619D008E7A56 /* www */; };
+		185424832B6F648700A76142 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 185424812B6F648700A76142 /* utils.mm */; };
 		188C91582B3C238C00A13E65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C91562B3C238C00A13E65 /* Main.storyboard */; };
 		188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 188C91592B3C239000A13E65 /* Assets.xcassets */; };
 		188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */; };
 		188C91682B3C23B300A13E65 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188C91662B3C23B300A13E65 /* main.mm */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		185424902B6F769A00A76142 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1854248C2B6F769A00A76142 /* test111.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1850483E29C99E0500139015;
+			remoteInfo = test111;
+		};
+		185424922B6F76A000A76142 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1854248C2B6F769A00A76142 /* test111.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 1850483D29C99E0500139015;
+			remoteInfo = test111;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		182C81FF2B52619D008E7A56 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
+		185424812B6F648700A76142 /* utils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = utils.mm; sourceTree = "<group>"; };
+		185424822B6F648700A76142 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		1854248C2B6F769A00A76142 /* test111.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = test111.xcodeproj; path = ../../../test3/test/test111.xcodeproj; sourceTree = "<group>"; };
 		188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelperDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollStoreRemoteHelperDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		188C91572B3C238C00A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		188C91592B3C239000A13E65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -48,9 +69,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1854248D2B6F769A00A76142 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				185424912B6F769A00A76142 /* test111 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		188C91412B3C238C00A13E65 = {
 			isa = PBXGroup;
 			children = (
+				1854248C2B6F769A00A76142 /* test111.xcodeproj */,
 				18A6F36C2B42C57300DD896F /* md-trollstore */,
 				188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelperDemo */,
 				188C914B2B3C238C00A13E65 /* Products */,
@@ -75,6 +105,8 @@
 				188C91592B3C239000A13E65 /* Assets.xcassets */,
 				188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */,
 				188C915E2B3C239000A13E65 /* Info.plist */,
+				185424822B6F648700A76142 /* utils.h */,
+				185424812B6F648700A76142 /* utils.mm */,
 				188C91662B3C23B300A13E65 /* main.mm */,
 			);
 			path = TrollStoreRemoteHelperDemo;
@@ -109,6 +141,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				185424932B6F76A000A76142 /* PBXTargetDependency */,
 			);
 			name = TrollStoreRemoteHelperDemo;
 			productName = TrollStoreRemoteHelper;
@@ -140,12 +173,28 @@
 			mainGroup = 188C91412B3C238C00A13E65;
 			productRefGroup = 188C914B2B3C238C00A13E65 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 1854248D2B6F769A00A76142 /* Products */;
+					ProjectRef = 1854248C2B6F769A00A76142 /* test111.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				188C91492B3C238C00A13E65 /* TrollStoreRemoteHelperDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		185424912B6F769A00A76142 /* test111 */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = test111;
+			remoteRef = 185424902B6F769A00A76142 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		188C91482B3C238C00A13E65 /* Resources */ = {
@@ -187,10 +236,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				188C91682B3C23B300A13E65 /* main.mm in Sources */,
+				185424832B6F648700A76142 /* utils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		185424932B6F76A000A76142 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = test111;
+			targetProxy = 185424922B6F76A000A76142 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		188C91562B3C238C00A13E65 /* Main.storyboard */ = {
@@ -216,10 +274,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -274,7 +329,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -282,10 +337,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					arm64,
-					arm64e,
-				);
+				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -335,7 +387,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 arm64e";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
@@ -355,7 +407,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.138;
+				TROLLSTORE_DEVICE_IP = 192.168.0.35;
 			};
 			name = Debug;
 		};
@@ -375,7 +427,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper.Demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = 192.168.0.138;
+				TROLLSTORE_DEVICE_IP = 192.168.0.35;
 			};
 			name = Release;
 		};

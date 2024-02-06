@@ -2,6 +2,8 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
+NSString* log_prefix = @"helper_demo";
+
 @interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, WKNavigationDelegate>
 @property(strong, nonatomic) UIWindow* window;
 @property(retain) WKWebView* webview;
@@ -30,20 +32,30 @@ static AppDelegate* _g_app = nil;
         self.webview = webview;
 
         NSString* wwwpath = [NSString stringWithFormat:@"%@/www/index.html", NSBundle.mainBundle.bundlePath];
-        NSURL* url = [NSURL URLWithString:wwwpath];
+        NSURL* url = [NSURL fileURLWithPath:wwwpath];
         NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];;
         [webview loadRequest:req];
     }
 }
-- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation {
-    [self.window addSubview:webView];
-    [self.window bringSubviewToFront:webView];
+- (void)webView:(WKWebView*)webview didFinishNavigation:(WKNavigation*)navigation {
+    [self.window addSubview:webview];
+    [self.window bringSubviewToFront:webview];
 }
 @end
 
+
+
+#include "utils.h"
+
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, @"AppDelegate");
+        if (argc == 1) {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                NSString* binpath = [NSString stringWithFormat:@"%@/www/test111", NSBundle.mainBundle.bundlePath];
+                spawn(@[binpath], nil, nil, 0, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+            });
+            return UIApplicationMain(argc, argv, nil, @"AppDelegate");
+        }
     }
 }
 

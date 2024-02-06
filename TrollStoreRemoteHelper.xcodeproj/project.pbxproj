@@ -7,135 +7,107 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18101EDD2B49123600424C28 /* CoreServices.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18101EDC2B49123600424C28 /* CoreServices.tbd */; };
-		185C21712B46EB2C00E79849 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188C91692B3C24AA00A13E65 /* utils.mm */; };
-		185C21822B484B6C00E79849 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C917B2B3C41AB00A13E65 /* CFNetwork.framework */; };
-		185C21832B484B7900E79849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91792B3C41A000A13E65 /* libz.tbd */; };
-		185C21842B484B8B00E79849 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC32E2B3D7F20009B411E /* CoreServices.framework */; };
-		185C21882B48614A00E79849 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C91772B3C40B700A13E65 /* UIKit.framework */; };
-		188C91582B3C238C00A13E65 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C91562B3C238C00A13E65 /* Main.storyboard */; };
-		188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 188C91592B3C239000A13E65 /* Assets.xcassets */; };
-		188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */; };
-		188C91682B3C23B300A13E65 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 188C91662B3C23B300A13E65 /* main.mm */; };
-		188C91762B3C3F9300A13E65 /* www in Resources */ = {isa = PBXBuildFile; fileRef = 188C91742B3C3DF800A13E65 /* www */; };
-		188CD97A2B48682D004BCD6F /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 188C916D2B3C28D300A13E65 /* GCDWebServers.framework */; };
-		18A7051A2B3F1EF00064B9EF /* fakeroot in Resources */ = {isa = PBXBuildFile; fileRef = 18A705182B3F1EE60064B9EF /* fakeroot */; };
-		18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BDC3302B3D8771009B411E /* WebKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		184FE8042B70BE8100525080 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184FE8032B70BE8100525080 /* UserNotifications.framework */; };
+		185E6D7A2B72097F000EEEEA /* fakeroot in Resources */ = {isa = PBXBuildFile; fileRef = 185E6D792B720975000EEEEA /* fakeroot */; };
+		185E6D7C2B7209CB000EEEEA /* www in Resources */ = {isa = PBXBuildFile; fileRef = 185E6D7B2B7209C3000EEEEA /* www */; };
+		1878863B2B51976A00E48B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 187886392B51976A00E48B28 /* Main.storyboard */; };
+		1878863D2B51976B00E48B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1878863C2B51976B00E48B28 /* Assets.xcassets */; };
+		187886402B51976B00E48B28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1878863E2B51976B00E48B28 /* LaunchScreen.storyboard */; };
+		187886432B51976B00E48B28 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187886422B51976B00E48B28 /* main.mm */; };
+		187886542B519B1600E48B28 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187886532B519B1600E48B28 /* CFNetwork.framework */; };
+		187886552B519B2100E48B28 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1878864E2B5199EC00E48B28 /* UIKit.framework */; };
+		18C50C662B6D2D5D00793FA9 /* utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18C50C652B6D2D5D00793FA9 /* utils.mm */; };
+		18C50C782B6DFD5500793FA9 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C50C772B6DFD5500793FA9 /* GCDWebServers.framework */; };
+		18C50C7A2B6DFD6000793FA9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C50C792B6DFD6000793FA9 /* libz.tbd */; };
+		18C50C7C2B6DFD8000793FA9 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C50C7B2B6DFD8000793FA9 /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		18101EDC2B49123600424C28 /* CoreServices.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CoreServices.tbd; sourceTree = "<group>"; };
-		185C21732B46EF4100E79849 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
-		185C21762B46EF6000E79849 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		185C21782B46EF7700E79849 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
-		185C217A2B46EFA700E79849 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		185C217C2B46F0D900E79849 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/usr/lib/libxml2.tbd; sourceTree = DEVELOPER_DIR; };
-		188A4CE22B43DD90006E227D /* bin.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = bin.entitlements; sourceTree = "<group>"; };
-		188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollStoreRemoteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		188C91572B3C238C00A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		188C91592B3C239000A13E65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		188C915C2B3C239000A13E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		188C915E2B3C239000A13E65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		188C91662B3C23B300A13E65 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		188C91692B3C24AA00A13E65 /* utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = utils.mm; sourceTree = "<group>"; };
-		188C916B2B3C24F800A13E65 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		188C916D2B3C28D300A13E65 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = ../../../../../opt/framework/GCDWebServers.framework; sourceTree = "<group>"; };
-		188C916F2B3C30BE00A13E65 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = ../../../../../opt/theos/sdks/iPhoneOS12.2.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = "<group>"; };
-		188C91742B3C3DF800A13E65 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
-		188C91772B3C40B700A13E65 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		188C91792B3C41A000A13E65 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		188C917B2B3C41AB00A13E65 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		18A6F35B2B42C3B100DD896F /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		18A6F36A2B42C4E500DD896F /* md-trollstore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "md-trollstore"; sourceTree = "<group>"; };
-		18A705182B3F1EE60064B9EF /* fakeroot */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fakeroot; sourceTree = "<group>"; };
-		18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
-		18B4A1602B5144F900391695 /* lauchctl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = lauchctl.entitlements; sourceTree = "<group>"; };
-		18B7386B2B5FFC0F008E7A08 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
-		18B7386D2B5FFC13008E7A08 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
-		18B7386F2B5FFC16008E7A08 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		18B738712B5FFC23008E7A08 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
-		18BDC32E2B3D7F20009B411E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
-		18BDC3302B3D8771009B411E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		18FD8BEC2B3FD5720093FB3A /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		18497C5D2B541D6100A6C5E3 /* md-trollstore */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "md-trollstore"; sourceTree = "<group>"; };
+		18497C5E2B541D8000A6C5E3 /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
+		184FE8032B70BE8100525080 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		185E6D792B720975000EEEEA /* fakeroot */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fakeroot; path = TrollStoreRemoteHelper/fakeroot; sourceTree = "<group>"; };
+		185E6D7B2B7209C3000EEEEA /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; name = www; path = TrollStoreRemoteHelper/www; sourceTree = "<group>"; };
+		1878862D2B51976A00E48B28 /* TrollStoreRemoteHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollStoreRemoteHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1878863A2B51976A00E48B28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1878863C2B51976B00E48B28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1878863F2B51976B00E48B28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		187886412B51976B00E48B28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		187886422B51976B00E48B28 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		1878864E2B5199EC00E48B28 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		187886532B519B1600E48B28 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		187886562B519B2400E48B28 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		18B757232B57FDB2008A67D1 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
+		18C50C652B6D2D5D00793FA9 /* utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = utils.mm; sourceTree = "<group>"; };
+		18C50C672B6D2D6E00793FA9 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		18C50C772B6DFD5500793FA9 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = ../../../../../opt/framework/GCDWebServers.framework; sourceTree = "<group>"; };
+		18C50C792B6DFD6000793FA9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		18C50C7B2B6DFD8000793FA9 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		188C91472B3C238C00A13E65 /* Frameworks */ = {
+		1878862A2B51976A00E48B28 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				185C21882B48614A00E79849 /* UIKit.framework in Frameworks */,
-				185C21842B484B8B00E79849 /* CoreServices.framework in Frameworks */,
-				185C21832B484B7900E79849 /* libz.tbd in Frameworks */,
-				185C21822B484B6C00E79849 /* CFNetwork.framework in Frameworks */,
-				18101EDD2B49123600424C28 /* CoreServices.tbd in Frameworks */,
-				18BDC3312B3D8771009B411E /* WebKit.framework in Frameworks */,
-				188CD97A2B48682D004BCD6F /* GCDWebServers.framework in Frameworks */,
+				187886542B519B1600E48B28 /* CFNetwork.framework in Frameworks */,
+				18C50C7C2B6DFD8000793FA9 /* CoreServices.framework in Frameworks */,
+				18C50C782B6DFD5500793FA9 /* GCDWebServers.framework in Frameworks */,
+				18C50C7A2B6DFD6000793FA9 /* libz.tbd in Frameworks */,
+				187886552B519B2100E48B28 /* UIKit.framework in Frameworks */,
+				184FE8042B70BE8100525080 /* UserNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		188C91412B3C238C00A13E65 = {
+		187886242B51976A00E48B28 = {
 			isa = PBXGroup;
 			children = (
-				18A6F36A2B42C4E500DD896F /* md-trollstore */,
-				18FD8BEC2B3FD5720093FB3A /* Readme.md */,
-				188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */,
-				188C914B2B3C238C00A13E65 /* Products */,
-				188C916C2B3C28D200A13E65 /* Frameworks */,
+				185E6D792B720975000EEEEA /* fakeroot */,
+				185E6D7B2B7209C3000EEEEA /* www */,
+				18B757232B57FDB2008A67D1 /* Readme.md */,
+				18497C5D2B541D6100A6C5E3 /* md-trollstore */,
+				1878862F2B51976A00E48B28 /* TrollStoreRemoteHelper */,
+				1878862E2B51976A00E48B28 /* Products */,
+				187886492B5199D800E48B28 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		188C914B2B3C238C00A13E65 /* Products */ = {
+		1878862E2B51976A00E48B28 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */,
+				1878862D2B51976A00E48B28 /* TrollStoreRemoteHelper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		188C914C2B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
+		1878862F2B51976A00E48B28 /* TrollStoreRemoteHelper */ = {
 			isa = PBXGroup;
 			children = (
-				18A705182B3F1EE60064B9EF /* fakeroot */,
-				188C91742B3C3DF800A13E65 /* www */,
-				18B26BB32B3D6A3C0030D75D /* TrollStoreRemoteHelper.entitlements */,
-				18B4A1602B5144F900391695 /* lauchctl.entitlements */,
-				188A4CE22B43DD90006E227D /* bin.entitlements */,
-				188C91562B3C238C00A13E65 /* Main.storyboard */,
-				188C91592B3C239000A13E65 /* Assets.xcassets */,
-				188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */,
-				188C915E2B3C239000A13E65 /* Info.plist */,
-				188C91662B3C23B300A13E65 /* main.mm */,
-				188C916B2B3C24F800A13E65 /* utils.h */,
-				188C91692B3C24AA00A13E65 /* utils.mm */,
-				18101EDC2B49123600424C28 /* CoreServices.tbd */,
+				18497C5E2B541D8000A6C5E3 /* TrollStoreRemoteHelper.entitlements */,
+				187886392B51976A00E48B28 /* Main.storyboard */,
+				1878863E2B51976B00E48B28 /* LaunchScreen.storyboard */,
+				1878863C2B51976B00E48B28 /* Assets.xcassets */,
+				187886412B51976B00E48B28 /* Info.plist */,
+				187886422B51976B00E48B28 /* main.mm */,
+				18C50C652B6D2D5D00793FA9 /* utils.mm */,
+				18C50C672B6D2D6E00793FA9 /* utils.h */,
 			);
 			path = TrollStoreRemoteHelper;
 			sourceTree = "<group>";
 		};
-		188C916C2B3C28D200A13E65 /* Frameworks */ = {
+		187886492B5199D800E48B28 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				18B738712B5FFC23008E7A08 /* WebKit.framework */,
-				18B7386F2B5FFC16008E7A08 /* CFNetwork.framework */,
-				18B7386D2B5FFC13008E7A08 /* libz.tbd */,
-				18B7386B2B5FFC0F008E7A08 /* CoreServices.framework */,
-				185C217C2B46F0D900E79849 /* libxml2.tbd */,
-				185C217A2B46EFA700E79849 /* UIKit.framework */,
-				185C21782B46EF7700E79849 /* CoreServices.framework */,
-				185C21762B46EF6000E79849 /* CFNetwork.framework */,
-				185C21732B46EF4100E79849 /* libz.tbd */,
-				18BDC3302B3D8771009B411E /* WebKit.framework */,
-				18BDC32E2B3D7F20009B411E /* CoreServices.framework */,
-				188C917B2B3C41AB00A13E65 /* CFNetwork.framework */,
-				188C91792B3C41A000A13E65 /* libz.tbd */,
-				188C91772B3C40B700A13E65 /* UIKit.framework */,
-				188C916F2B3C30BE00A13E65 /* CoreServices.framework */,
-				188C916D2B3C28D300A13E65 /* GCDWebServers.framework */,
-				18A6F35B2B42C3B100DD896F /* CoreFoundation.framework */,
+				184FE8032B70BE8100525080 /* UserNotifications.framework */,
+				18C50C7B2B6DFD8000793FA9 /* CoreServices.framework */,
+				18C50C792B6DFD6000793FA9 /* libz.tbd */,
+				18C50C772B6DFD5500793FA9 /* GCDWebServers.framework */,
+				187886562B519B2400E48B28 /* WebKit.framework */,
+				187886532B519B1600E48B28 /* CFNetwork.framework */,
+				1878864E2B5199EC00E48B28 /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -143,39 +115,39 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */ = {
+		1878862C2B51976A00E48B28 /* TrollStoreRemoteHelper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 188C91632B3C239000A13E65 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */;
+			buildConfigurationList = 187886462B51976B00E48B28 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */;
 			buildPhases = (
-				188C91462B3C238C00A13E65 /* Sources */,
-				188C91472B3C238C00A13E65 /* Frameworks */,
-				188C91482B3C238C00A13E65 /* Resources */,
-				18B26BB12B3D5B8B0030D75D /* ShellScript */,
+				187886292B51976A00E48B28 /* Sources */,
+				1878862A2B51976A00E48B28 /* Frameworks */,
+				1878862B2B51976A00E48B28 /* Resources */,
+				18161F122B54ED46006C6C0F /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = TrollStoreRemoteHelper;
-			productName = TrollStoreRemoteHelper;
-			productReference = 188C914A2B3C238C00A13E65 /* TrollStoreRemoteHelper.app */;
+			productName = AlDente;
+			productReference = 1878862D2B51976A00E48B28 /* TrollStoreRemoteHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		188C91422B3C238C00A13E65 /* Project object */ = {
+		187886252B51976A00E48B28 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1170;
 				ORGANIZATIONNAME = chaoge;
 				TargetAttributes = {
-					188C91492B3C238C00A13E65 = {
+					1878862C2B51976A00E48B28 = {
 						CreatedOnToolsVersion = 11.7;
 					};
 				};
 			};
-			buildConfigurationList = 188C91452B3C238C00A13E65 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */;
+			buildConfigurationList = 187886282B51976A00E48B28 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -183,33 +155,33 @@
 				en,
 				Base,
 			);
-			mainGroup = 188C91412B3C238C00A13E65;
-			productRefGroup = 188C914B2B3C238C00A13E65 /* Products */;
+			mainGroup = 187886242B51976A00E48B28;
+			productRefGroup = 1878862E2B51976A00E48B28 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				188C91492B3C238C00A13E65 /* TrollStoreRemoteHelper */,
+				1878862C2B51976A00E48B28 /* TrollStoreRemoteHelper */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		188C91482B3C238C00A13E65 /* Resources */ = {
+		1878862B2B51976A00E48B28 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188C91762B3C3F9300A13E65 /* www in Resources */,
-				18A7051A2B3F1EF00064B9EF /* fakeroot in Resources */,
-				188C915D2B3C239000A13E65 /* LaunchScreen.storyboard in Resources */,
-				188C915A2B3C239000A13E65 /* Assets.xcassets in Resources */,
-				188C91582B3C238C00A13E65 /* Main.storyboard in Resources */,
+				185E6D7A2B72097F000EEEEA /* fakeroot in Resources */,
+				185E6D7C2B7209CB000EEEEA /* www in Resources */,
+				1878863D2B51976B00E48B28 /* Assets.xcassets in Resources */,
+				187886402B51976B00E48B28 /* LaunchScreen.storyboard in Resources */,
+				1878863B2B51976A00E48B28 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		18B26BB12B3D5B8B0030D75D /* ShellScript */ = {
+		18161F122B54ED46006C6C0F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -224,36 +196,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$PWD/md-trollstore\n";
-			showEnvVarsInLog = 0;
+			shellScript = "$PWD/md-trollstore\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		188C91462B3C238C00A13E65 /* Sources */ = {
+		187886292B51976A00E48B28 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				188C91682B3C23B300A13E65 /* main.mm in Sources */,
-				185C21712B46EB2C00E79849 /* utils.mm in Sources */,
+				187886432B51976B00E48B28 /* main.mm in Sources */,
+				18C50C662B6D2D5D00793FA9 /* utils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		188C91562B3C238C00A13E65 /* Main.storyboard */ = {
+		187886392B51976A00E48B28 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				188C91572B3C238C00A13E65 /* Base */,
+				1878863A2B51976A00E48B28 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		188C915B2B3C239000A13E65 /* LaunchScreen.storyboard */ = {
+		1878863E2B51976B00E48B28 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				188C915C2B3C239000A13E65 /* Base */,
+				1878863F2B51976B00E48B28 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -261,14 +232,14 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		188C91612B3C239000A13E65 /* Debug */ = {
+		187886442B51976B00E48B28 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -299,7 +270,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = /opt/framework;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -314,26 +285,27 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACH_O_TYPE = mh_execute;
+				HEADER_SEARCH_PATHS = (
+					/opt/theos/vendor/include,
+					/opt/include,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				TROLLSTORE_SUID = "";
 				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
-		188C91622B3C239000A13E65 /* Release */ = {
+		187886452B51976B00E48B28 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -364,7 +336,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = /opt/framework;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -373,113 +345,114 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				MACH_O_TYPE = mh_execute;
+				HEADER_SEARCH_PATHS = (
+					/opt/theos/vendor/include,
+					/opt/include,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				TROLLSTORE_SUID = "";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};
-		188C91642B3C239000A13E65 /* Debug */ = {
+		187886472B51976B00E48B28 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YZGT4R4484;
+				CODE_SIGN_ENTITLEMENTS = "${TARGET_NAME}/${TARGET_NAME}.entitlements";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/framework,
-				);
 				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/framework,
+					/opt/theos/vendor/include,
+					/opt/include,
 				);
-				INFOPLIST_FILE = TrollStoreRemoteHelper/Info.plist;
+				INFOPLIST_FILE = "${TARGET_NAME}/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TrollStoreRemoteHelper",
+					/opt/lib,
+					"$(PROJECT_DIR)/AlDente",
 				);
-				MARKETING_VERSION = 1.3;
-				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
+				MonkeyDevBuildPackageOnAnyBuild = YES;
+				MonkeyDevDeviceIP = 127.0.0.1;
+				MonkeyDevInstallOnAnyBuild = NO;
+				MonkeyDevPath = /opt/MonkeyDev;
+				MonkeyDevTheosPath = /opt/theos;
+				PRODUCT_BUNDLE_IDENTIFIER = "chaoge.${TARGET_NAME}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TROLLSTORE_DEVICE_IP = "";
-				TROLLSTORE_SUID = YES;
 			};
 			name = Debug;
 		};
-		188C91652B3C239000A13E65 /* Release */ = {
+		187886482B51976B00E48B28 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YZGT4R4484;
+				CODE_SIGN_ENTITLEMENTS = "${TARGET_NAME}/${TARGET_NAME}.entitlements";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.framework *.gch *.xcode* *.xcassets (*) .DS_Store CVS .svn .git .hg *.pbproj *.pbxproj";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/framework,
-				);
 				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/framework,
+					/opt/theos/vendor/include,
+					/opt/include,
 				);
-				INFOPLIST_FILE = TrollStoreRemoteHelper/Info.plist;
+				INFOPLIST_FILE = "${TARGET_NAME}/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/TrollStoreRemoteHelper",
+					/opt/lib,
+					"$(PROJECT_DIR)/AlDente",
 				);
-				MARKETING_VERSION = 1.3;
-				PRODUCT_BUNDLE_IDENTIFIER = chaoge.TrollStoreRemoteHelper;
+				MonkeyDevBuildPackageOnAnyBuild = YES;
+				MonkeyDevDeviceIP = 127.0.0.1;
+				MonkeyDevInstallOnAnyBuild = NO;
+				MonkeyDevPath = /opt/MonkeyDev;
+				MonkeyDevTheosPath = /opt/theos;
+				PRODUCT_BUNDLE_IDENTIFIER = "chaoge.${TARGET_NAME}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TROLLSTORE_DEVICE_IP = "";
-				TROLLSTORE_SUID = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		188C91452B3C238C00A13E65 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */ = {
+		187886282B51976A00E48B28 /* Build configuration list for PBXProject "TrollStoreRemoteHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				188C91612B3C239000A13E65 /* Debug */,
-				188C91622B3C239000A13E65 /* Release */,
+				187886442B51976B00E48B28 /* Debug */,
+				187886452B51976B00E48B28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		188C91632B3C239000A13E65 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */ = {
+		187886462B51976B00E48B28 /* Build configuration list for PBXNativeTarget "TrollStoreRemoteHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				188C91642B3C239000A13E65 /* Debug */,
-				188C91652B3C239000A13E65 /* Release */,
+				187886472B51976B00E48B28 /* Debug */,
+				187886482B51976B00E48B28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 188C91422B3C238C00A13E65 /* Project object */;
+	rootObject = 187886252B51976A00E48B28 /* Project object */;
 }

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:TrollStoreRemoteHelper.xcodeproj">
+      location = "self:/Users/apple/Documents/Tool/TrollStoreRemoteHelper/TrollStoreRemoteHelper.xcodeproj">
    </FileRef>
 </Workspace>
