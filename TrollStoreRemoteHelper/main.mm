@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-
 #import <GCDWebServers/GCDWebServers.h>
+#include "Reachability.h"
+#import <UIKit/UIKit.h>
 #include "utils.h"
 
 #define PRODUCT         "TrollStoreRemoteHelper"
@@ -19,7 +19,6 @@ NSString* log_prefix = @(PRODUCT "Logger");
 @implementation AppDelegate
 static UIWindow* _g_wind = nil;
 static AppDelegate* _g_app = nil;
-static BOOL _webview_inited = NO;
 - (void)sceneWillEnterForeground:(UIScene*)scene API_AVAILABLE(ios(13.0)) {
     _g_wind = self.window;
 }
@@ -34,7 +33,7 @@ static BOOL _webview_inited = NO;
         _g_app = self;
         
         CGSize size = UIScreen.mainScreen.bounds.size;
-        // 从WKWebView换UIWebView: 巨魔+越狱共存环境下签名问题导致delegate不生效而黑屏
+        // iOS>=16时WKWebView只能在沙盒中运行,不能用于TrollStore环境
         UIWebView* webview = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
         webview.delegate = self;
         self.webview = webview;
@@ -43,19 +42,21 @@ static BOOL _webview_inited = NO;
         NSURL* url = [NSURL URLWithString:wwwpath];
         NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3.0];
         [webview loadRequest:req];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            if (!_webview_inited) { // 巨魔+越狱共存环境下因签名问题导致delegate不生效而黑屏
-                [self.window addSubview:webview];
-                [self.window bringSubviewToFront:webview];
-                _webview_inited = YES;
-            }
-        });
     }
 }
 - (void)webViewDidFinishLoad:(UIWebView*)webview {
     [self.window addSubview:webview];
     [self.window bringSubviewToFront:webview];
-    _webview_inited = YES;
+}
+- (void)webView:(UIWebView*)webview didFailLoadWithError:(NSError*)error {
+    NSString* surl = webview.request.URL.absoluteString;
+    [NSThread sleepForTimeInterval:0.5];
+    if (surl.length == 0) { // 服务端未初始化时url会被置空
+        surl = [NSString stringWithFormat:@"http://127.0.0.1:%d", GSERV_PORT];
+    }
+    NSURL* url = [NSURL URLWithString:surl];
+    NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:3.0];
+    [webview loadRequest:req];
 }
 @end
 
@@ -66,11 +67,12 @@ static BOOL _webview_inited = NO;
 - (void)serve;
 @end
 
+static pid_t pid_sshd = -1;
+
 @implementation Service {
     NSMutableArray* logList;
     NSString* helper;
     NSString* bid;
-    pid_t pid_sshd;
     NSString* localIP;
 }
 + (instancetype)inst {
@@ -87,7 +89,6 @@ static BOOL _webview_inited = NO;
         self->bid = NSBundle.mainBundle.bundleIdentifier;
         self->logList = [NSMutableArray new];
         self->helper = nil;
-        self->pid_sshd = -1;
         NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot/bin"];
         addPathEnv(binPath);
         NSString* trollPath = getTrollStoreBundlePath();
@@ -108,6 +109,10 @@ static BOOL _webview_inited = NO;
         [self addLog:@"helper find: %@", helper_path];
         NSLog(@"%@ helper find: %@", log_prefix, helper_path);
         [self addLog:@"PATH=%s", getenv("PATH")];
+        NSString* downPath = [NSString stringWithFormat:@"%@/tmp", NSHomeDirectory()];
+        if (![man fileExistsAtPath:downPath]) {
+            [man createDirectoryAtPath:downPath withIntermediateDirectories:YES attributes:nil error:nil];
+        }
         return self;
     }
 }
@@ -115,44 +120,37 @@ static BOOL _webview_inited = NO;
     @autoreleasepool {
         for (LSApplicationProxy* proxy in list) {
             if ([proxy.bundleIdentifier isEqualToString:self->bid]) {
-                NSLog(@"%@ uninstalled, exit", log_prefix); // 卸载时系统不能自动杀本进程,需手动退出
-                [LSApplicationWorkspace.defaultWorkspace removeObserver:self];
-                if (self->pid_sshd > 0) {
-                    kill(self->pid_sshd, SIGKILL);
-                }
+                NSLog(@"%@ uninstalled, exit", log_prefix); // 卸载时旧版daemon自动退出
                 exit(0);
             }
         }
     }
 }
-- (void)checkIPChange {
-    NSString* newLocalIP = getLocalIP();
-    if (![self->localIP isEqualToString:newLocalIP]) {
-        NSLog(@"%@ detect IP change %@ -> %@, exit", log_prefix, self->localIP, newLocalIP);
-        exit(0);
+- (void)applicationsDidInstall:(NSArray<LSApplicationProxy*>*)list {
+    @autoreleasepool {
+        for (LSApplicationProxy* proxy in list) {
+            if ([proxy.bundleIdentifier isEqualToString:self->bid]) {
+                NSLog(@"%@ updated, exit", log_prefix); // 覆盖安装时旧版daemon自动退出
+                exit(0);
+            }
+        }
     }
+}
+- (void)serve_sshd {
+    NSString* root_path = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot"];
+    NSDictionary* param = @{
+        @"cwd": root_path,
+        @"close": getUnusedFds(),
+    };
+    //int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+    // dropbear使用fork,不兼容16.x+arm64e; sshdog使用posix_spawn,兼容性更好
+    int status = spawn(@[@"sshdog", @"-p", [@GSSHD_PORT stringValue]], nil, nil, &pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT, param);
+    NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, pid_sshd);
+    [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
 }
 - (void)serve {
     @autoreleasepool {
-        NSString* localIP = getLocalIP();
-        if (localIP == nil) {
-            Alert(@"Error", @"ip fetch failed", 10);
-            exit(0);
-        }
-        if (!localPortOpen(GSSHD_PORT)) { // 先启动sshd防止GSERV_PORT端口继承给sshd
-            [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
-            NSString* root_path = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot"];
-            NSDictionary* param = @{
-                @"cwd": root_path,
-            };
-            //int status = spawn(@[@"dropbear", @"-p", [@GSSHD_PORT stringValue], @"-F", @"-S", root_path], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
-            // dropbear使用fork,不兼容16.x+arm64e; sshdog使用posix_spawn,兼容性更好
-            int status = spawn(@[@"sshdog"], nil, nil, &self->pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT, param);
-            NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, self->pid_sshd);
-        } else {
-            [self addLog:@"sshd listen=%@:%d", localIP, GSSHD_PORT];
-        }
-        self->localIP = localIP;
+        self->localIP = getLocalIP();
         static GCDWebServer* _webServer = nil;
         if (_webServer == nil) {
             if (localPortOpen(GSERV_PORT)) {
@@ -170,15 +168,24 @@ static BOOL _webview_inited = NO;
                 NSDictionary* jres = [self handlePOST:request.path with:request.text];
                 return [GCDWebServerDataResponse responseWithJSONObject:jres];
             }];
-            [self addLog:@"pid=%d listen=%@:%d", getpid(), localIP, GSERV_PORT];
-            NSLog(@"%@ pid=%d listen=%@:%d", log_prefix, getpid(), localIP, GSERV_PORT);
+            [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
+            NSLog(@"%@ pid=%d listen=%@:%d", log_prefix, getpid(), self->localIP, GSERV_PORT);
             BOOL status = [_webServer startWithPort:GSERV_PORT bonjourName:nil];
             if (!status) {
                 NSLog(@"%@ serve failed, exit", log_prefix);
                 exit(0);
             }
             [LSApplicationWorkspace.defaultWorkspace addObserver:self];
-            [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkIPChange) userInfo:nil repeats:YES];
+            static Reachability* reach = [Reachability reachabilityWithHostname:@"www.baidu.com"];
+            reach.reachabilityBlock = ^(Reachability* reachability, SCNetworkConnectionFlags flags) {
+                self->localIP = getLocalIP();
+                [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
+                [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
+            };
+            [reach startNotifier];
+        }
+        if (!localPortOpen(GSSHD_PORT)) { // 先启动sshd防止GSERV_PORT端口继承给sshd
+            [self serve_sshd];
         }
     }
 }
@@ -198,6 +205,31 @@ static BOOL _webview_inited = NO;
                 @"status": @0,
                 @"data": logList,
             };
+        } else if ([path hasPrefix:@"/cmd"]) {
+            NSString* stdOut = nil;
+            NSString* stdErr = nil;
+            NSArray* cmd = [data componentsSeparatedByString:@" "];
+            int status = spawn(cmd, &stdOut, &stdErr, 0, SPAWN_FLAG_ROOT);
+            return @{
+                @"status": @(status),
+                @"stdout": stdOut,
+                @"stderr": stdErr,
+            };
+        } else if ([path hasPrefix:@"/shell"]) {
+            NSString* filePath = [NSString stringWithFormat:@"%@/tmp/_tmp.sh", NSHomeDirectory()];
+            if (![data writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil]) {
+                return @{
+                    @"status": @-1,
+                };
+            }
+            NSString* stdOut = @"";
+            NSString* stdErr = @"";
+            int status = spawn(@[@"bash", filePath], &stdOut, &stdErr, nil, SPAWN_FLAG_ROOT);
+            return @{
+                @"status": @(status),
+                @"stdout": stdOut,
+                @"stderr": stdErr,
+            };
         }
         return @{
             @"status": @-1,
@@ -206,18 +238,18 @@ static BOOL _webview_inited = NO;
 }
 - (int)handlePUT:(NSString*)path with:(NSData*)data { // for upload file or install ipa
     @autoreleasepool {
-        NSString* fileName = [path lastPathComponent];
-        NSString* filePath = [NSString stringWithFormat:@"%@/tmp/%@", NSHomeDirectory(), fileName];
-        if (![data writeToFile:filePath atomically:YES]) {
-            [self addLog:@"download failed: %@", filePath];
-            return 411;
-        }
-        [self addLog:@"download success: %@", filePath];
-        NSLog(@"%@ download success: %@", log_prefix, filePath);
         if ([path hasPrefix:@"/install"]) {
             if (self->helper == nil) {
                 return 410;
             }
+            NSString* fileName = [path lastPathComponent];
+            NSString* filePath = [NSString stringWithFormat:@"%@/tmp/%@", NSHomeDirectory(), fileName];
+            if (![data writeToFile:filePath atomically:YES]) {
+                [self addLog:@"download failed: %@", filePath];
+                return 411;
+            }
+            [self addLog:@"download success: %@", filePath];
+            NSLog(@"%@ download success: %@", log_prefix, filePath);
             int status = spawn(@[@"trollstorehelper", @"install", filePath], nil, nil, nil, SPAWN_FLAG_ROOT); // 需要先卸载吗?
             if (status != 0) {
                 [self addLog:@"install failed %d: %@", status, fileName];
@@ -226,40 +258,32 @@ static BOOL _webview_inited = NO;
             }
             [self addLog:@"install success %@", fileName];
             NSLog(@"%@ install success %@", log_prefix, fileName);
-        } else if ([path hasPrefix:@"/shell"]) {
-            NSString* stdOut = @"";
-            NSString* stdErr = @"";
-            int status = spawn(@[@"sh", filePath], &stdOut, &stdErr, nil, SPAWN_FLAG_ROOT);
-            [self addLog:@"cmd=%@ status=%d stdout=%@ stderr=%@", data, status, stdOut, stdErr];
         }
         return 200;
     }
 }
 @end
 
-NSString* getCwd() {
-    char cwd[PATH_MAX];
-    getcwd(cwd, sizeof(cwd));
-    return @(cwd);
-}
 
 int main(int argc, char** argv) {
     @autoreleasepool {
         if (argc == 1) {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                if (!localPortOpen(GSERV_PORT)) {
-                    pid_t pid_serv = -1;
-                    int status = spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
-                    NSLog(@"%@ spawn server status=%d pid=%d", log_prefix, status, pid_serv);
-                }
+                pid_t pid_serv = -1;
+                spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
             });
             return UIApplicationMain(argc, argv, nil, @"AppDelegate");
         }
         if (0 == strcmp(argv[1], "serve")) {
-            NSLog(@"%@ serve cwd=%@", log_prefix, getCwd());
             signal(SIGHUP, SIG_IGN);
             signal(SIGTERM, SIG_IGN); // 防止App被Kill以后daemon退出
             [Service.inst serve];
+            atexit_b(^{
+                [LSApplicationWorkspace.defaultWorkspace removeObserver:Service.inst];
+                if (pid_sshd > 0) {
+                    kill(pid_sshd, SIGKILL);
+                }
+            });
             [NSRunLoop.mainRunLoop run];
         }
         return -1;

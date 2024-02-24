@@ -61,6 +61,12 @@ int spawn(NSArray* args, NSString** stdOut, NSString** stdErr, pid_t* pidPtr, in
             NSString* path = param[@"cwd"];
             posix_spawn_file_actions_addchdir_np(&action, path.UTF8String);
         }
+        if (param[@"close"] != nil) {
+            NSArray* closes_fds = param[@"close"];
+            for (NSNumber* nfd in closes_fds) {
+                posix_spawn_file_actions_addclose(&action, nfd.intValue);
+            }
+        }
     }
     int outErr[2];
     if(stdErr) {
@@ -245,30 +251,19 @@ NSString* getAppEXEPath() {
     return @(exe);
 }
 
-void runAsDaemon(void(^Block)()) {
-    static int fds[2];
-    int flag;
-    pipe(fds);
-    flag = fcntl(fds[0], F_GETFL, 0);
-    fcntl(fds[0], F_SETFL, flag | O_NONBLOCK);
-    flag = fcntl(fds[1], F_GETFL, 0);
-    fcntl(fds[1], F_SETFL, flag | O_NONBLOCK);
-    int forkpid = fork();
-    if (forkpid < 0) {
-        return;
-    } else if (forkpid > 0) { // father
-        return;
+NSArray* getUnusedFds() { // posix_spawn会将socket等fd继承给子进程
+    NSMutableArray* result = [NSMutableArray new];
+    for (int fd = 0; fd < 100; fd++) {
+        struct stat st;
+        if (0 == fstat(fd, &st)) {
+            if (S_ISSOCK(st.st_mode)) { // 避免子进程端口占用造成不必要的麻烦
+                [result addObject:@(fd)];
+            }
+        }
     }
-    setsid();
-    chdir("/");
-    umask(0);
-    int null_in = open("/dev/null", O_RDONLY);
-    int null_out = open("/dev/null", O_WRONLY);
-    dup2(null_in, STDIN_FILENO);
-    dup2(null_out, STDOUT_FILENO);
-    dup2(null_out, STDERR_FILENO);
-    Block();
+    return result;
 }
+
 
 int platformize_me() {
     int ret = 0;

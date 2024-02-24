@@ -69,6 +69,33 @@ helper端口绑定1222; ssh端口绑定1223 密码alpine, 无需越狱即可使�
 
 ![](https://raw.githubusercontent.com/lich4/TrollStoreRemoteHelper/main/screenshot.png)
 
+## 命令行
+
+执行命令
+```bash
+curl 192.168.0.35:1222/cmd -s -d "ls" | jq -r '.stdout'
+#Applications
+#Developer
+#Library
+#System
+#bin
+#...
+```
+
+执行shell文件
+
+test.sh
+```bash
+
+ls /
+```
+
+```bash
+curl 192.168.0.35:1222/shell -s -d @test.sh
+```
+
+curl 192.168.0.35:1222/shell -s -d @test.sh
+
 ## 杂记
 
 posix_spawn返回错误:

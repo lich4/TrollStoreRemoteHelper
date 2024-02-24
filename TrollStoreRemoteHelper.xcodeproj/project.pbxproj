@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1839C1C92B8A4EA500FCFDEB /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 1839C1C72B8A4EA500FCFDEB /* Reachability.m */; };
 		184FE8042B70BE8100525080 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184FE8032B70BE8100525080 /* UserNotifications.framework */; };
 		185E6D7A2B72097F000EEEEA /* fakeroot in Resources */ = {isa = PBXBuildFile; fileRef = 185E6D792B720975000EEEEA /* fakeroot */; };
 		185E6D7C2B7209CB000EEEEA /* www in Resources */ = {isa = PBXBuildFile; fileRef = 185E6D7B2B7209C3000EEEEA /* www */; };
@@ -23,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		181DC9972B748C5800C0E264 /* bin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bin.entitlements; path = TrollStoreRemoteHelper/bin.entitlements; sourceTree = "<group>"; };
+		1839C1C72B8A4EA500FCFDEB /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		1839C1C82B8A4EA500FCFDEB /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		18497C5D2B541D6100A6C5E3 /* md-trollstore */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "md-trollstore"; sourceTree = "<group>"; };
 		18497C5E2B541D8000A6C5E3 /* TrollStoreRemoteHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TrollStoreRemoteHelper.entitlements; sourceTree = "<group>"; };
 		184FE8032B70BE8100525080 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -65,6 +69,7 @@
 		187886242B51976A00E48B28 = {
 			isa = PBXGroup;
 			children = (
+				181DC9972B748C5800C0E264 /* bin.entitlements */,
 				185E6D792B720975000EEEEA /* fakeroot */,
 				185E6D7B2B7209C3000EEEEA /* www */,
 				18B757232B57FDB2008A67D1 /* Readme.md */,
@@ -94,6 +99,8 @@
 				187886422B51976B00E48B28 /* main.mm */,
 				18C50C652B6D2D5D00793FA9 /* utils.mm */,
 				18C50C672B6D2D6E00793FA9 /* utils.h */,
+				1839C1C82B8A4EA500FCFDEB /* Reachability.h */,
+				1839C1C72B8A4EA500FCFDEB /* Reachability.m */,
 			);
 			path = TrollStoreRemoteHelper;
 			sourceTree = "<group>";
@@ -196,7 +203,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$PWD/md-trollstore\n\n";
+			shellScript = "sleep 1\n$PWD/md-trollstore\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -206,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				187886432B51976B00E48B28 /* main.mm in Sources */,
+				1839C1C92B8A4EA500FCFDEB /* Reachability.m in Sources */,
 				18C50C662B6D2D5D00793FA9 /* utils.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,7 +399,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = "";
+				TROLLSTORE_DEVICE_IP = 192.168.0.192;
 			};
 			name = Debug;
 		};
@@ -427,7 +435,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TROLLSTORE_DEVICE_IP = "";
+				TROLLSTORE_DEVICE_IP = 192.168.0.192;
 			};
 			name = Release;
 		};

@@ -46,7 +46,7 @@ NSString* getLocalIP();
 void addPathEnv(NSString* path, BOOL tail=YES);
 BOOL localPortOpen(int port);
 NSString* getAppEXEPath();
-void runAsDaemon(void(^Block)());
+NSArray* getUnusedFds();
 int platformize_me();
 void Alert(NSString* title, NSString* msg, CFTimeInterval tmout);
 #endif /* utils_h */
