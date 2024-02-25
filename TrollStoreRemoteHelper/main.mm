@@ -178,9 +178,12 @@ static pid_t pid_sshd = -1;
             [LSApplicationWorkspace.defaultWorkspace addObserver:self];
             static Reachability* reach = [Reachability reachabilityWithHostname:@"www.baidu.com"];
             reach.reachabilityBlock = ^(Reachability* reachability, SCNetworkConnectionFlags flags) {
-                self->localIP = getLocalIP();
-                [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
-                [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
+                NSString* newIP = getLocalIP();
+                if (![self->localIP isEqualToString:newIP]) {
+                    self->localIP = newIP;
+                    [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
+                    [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
+                }
             };
             [reach startNotifier];
         }
@@ -290,5 +293,3 @@ int main(int argc, char** argv) {
     }
 }
 
-
-// todo 增加posix_spawn ssh
