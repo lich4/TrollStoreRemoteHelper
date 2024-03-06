@@ -9,7 +9,8 @@
 #define GSSHD_PORT      1223
 
 NSString* log_prefix = @(PRODUCT "Logger");
-
+static pid_t pid_serv = -1;
+static pid_t pid_sshd = -1;
 
 @interface AppDelegate : UIViewController<UIApplicationDelegate, UIWindowSceneDelegate, UIWebViewDelegate>
 @property(strong, nonatomic) UIWindow* window;
@@ -58,6 +59,19 @@ static AppDelegate* _g_app = nil;
     NSURLRequest* req = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:3.0];
     [webview loadRequest:req];
 }
+- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType {
+    NSString* url = request.URL.absoluteString;
+    if ([url hasSuffix:@"restart_server"]) {
+        if (pid_serv != -1) {
+            spawn(@[@"kill", @"-9", [@(pid_serv) stringValue]], nil, nil, nil, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+            sleep(1);
+            pid_serv = -1;
+        }
+        spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
+        return NO;
+    }
+    return YES;
+}
 @end
 
 
@@ -66,8 +80,6 @@ static AppDelegate* _g_app = nil;
 - (instancetype)init;
 - (void)serve;
 @end
-
-static pid_t pid_sshd = -1;
 
 @implementation Service {
     NSMutableArray* logList;
@@ -89,8 +101,6 @@ static pid_t pid_sshd = -1;
         self->bid = NSBundle.mainBundle.bundleIdentifier;
         self->logList = [NSMutableArray new];
         self->helper = nil;
-        NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot/bin"];
-        addPathEnv(binPath);
         NSString* trollPath = getTrollStoreBundlePath();
         if (trollPath == nil) {
             [self addLog:@"helper not find"];
@@ -146,7 +156,6 @@ static pid_t pid_sshd = -1;
     // dropbear使用fork,不兼容16.x+arm64e; sshdog使用posix_spawn,兼容性更好
     int status = spawn(@[@"sshdog", @"-p", [@GSSHD_PORT stringValue]], nil, nil, &pid_sshd, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT, param);
     NSLog(@"%@ spawn sshd status=%d pid=%d", log_prefix, status, pid_sshd);
-    [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
 }
 - (void)serve {
     @autoreleasepool {
@@ -168,7 +177,6 @@ static pid_t pid_sshd = -1;
                 NSDictionary* jres = [self handlePOST:request.path with:request.text];
                 return [GCDWebServerDataResponse responseWithJSONObject:jres];
             }];
-            [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
             NSLog(@"%@ pid=%d listen=%@:%d", log_prefix, getpid(), self->localIP, GSERV_PORT);
             BOOL status = [_webServer startWithPort:GSERV_PORT bonjourName:nil];
             if (!status) {
@@ -181,8 +189,6 @@ static pid_t pid_sshd = -1;
                 NSString* newIP = getLocalIP();
                 if (![self->localIP isEqualToString:newIP]) {
                     self->localIP = newIP;
-                    [self addLog:@"serv listen=%@:%d", self->localIP, GSERV_PORT];
-                    [self addLog:@"sshd listen=%@:%d", self->localIP, GSSHD_PORT];
                 }
             };
             [reach startNotifier];
@@ -206,7 +212,17 @@ static pid_t pid_sshd = -1;
         if ([path isEqualToString:@"/log"]) {
             return @{
                 @"status": @0,
+                @"ip": self->localIP,
                 @"data": logList,
+            };
+        } else if ([path isEqualToString:@"/restart_sshd"]) {
+            if (pid_sshd > 0) {
+                kill(pid_sshd, SIGKILL);
+                pid_sshd = -1;
+            }
+            [self serve_sshd];
+            return @{
+                @"status": @0,
             };
         } else if ([path hasPrefix:@"/cmd"]) {
             NSString* stdOut = nil;
@@ -270,9 +286,10 @@ static pid_t pid_sshd = -1;
 
 int main(int argc, char** argv) {
     @autoreleasepool {
+        NSString* binPath = [NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"fakeroot/bin"];
+        addPathEnv(binPath);
         if (argc == 1) {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                pid_t pid_serv = -1;
                 spawn(@[getAppEXEPath(), @"serve"], nil, nil, &pid_serv, SPAWN_FLAG_ROOT | SPAWN_FLAG_NOWAIT);
             });
             return UIApplicationMain(argc, argv, nil, @"AppDelegate");

@@ -7,19 +7,69 @@
     <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=0">
     <script src="jquery.min.js"></script>
+    <script>
+        if (location.port >= 5500 && location.port <= 5510) {
+            window.test = true;
+        }
+        $.ajaxSetup({
+            timeout: 1000,
+            contentType: "text/plain",
+        });
+    </script>
     <style>
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        html, body { 
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        body {
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #header {
+            flex: none;
+        }
+
+        #logger {
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            flex: auto;
+        }
     </style>
 </head>
 <body>
+    <div id="header">
+        <div id="ip">IP:?</div>
+        <button id="restart_server" type="button">restart_server</button>
+        <button id="restart_sshd" type="button">restart_sshd</button>
+    </div>
     <div id="logger"></div>
     <script>
+        function reqf(path, data, cb) {
+            if (window.test) {
+                $.get(path, { _: $.now() }, (data, status) => {
+                    cb(JSON.parse(data));
+                }).fail(res => {
+                    $("body").text("Connect server failed, please restart app");
+                });
+            } else {
+                $.post(path, data, cb).fail(res => {
+                    $("body").text("Connect server failed, please restart app");
+                });
+            }
+        }
         function update_log() {
-            $.post("/log", "{}", (data, status) => {
-                var msg_list = data.data;
+            reqf("/log", "(null)", data => {
+                var jdata = data;
+                var msg_list = jdata.data;
+                $("#ip").html("server:" + jdata.ip + ":1222<br>sshd:" + jdata.ip + ":1223");
                 var last_line = msg_list[msg_list.length - 1];
                 if (document.lastline == last_line) {
                     return;
@@ -30,11 +80,19 @@
                     var ele = $("<pre></pre>").text(item);
                     $("#logger").append(ele);
                 });
-                $("html, body").animate({ scrollTop: $(document).height() }, 100);
-            }).fail(res => {
-                $("body").text("Connect server failed, please restart app");
+                $("#logger").animate({ scrollTop: $(document).height() }, 100);
             });
         }
+        $("#restart_server").click(() => {
+            location.href = "/api/restart_server";
+            setTimeout(()=>{
+                location.reload();
+            }, 2000);
+        });
+        $("#restart_sshd").click(() => {
+            reqf("/restart_sshd", "(null)", data => {
+            });
+        });
         $(function() {
             setInterval(update_log, 1000);
         });
