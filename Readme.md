@@ -1,3 +1,5 @@
+* [杂记](#杂记)
+
 # TrollStoreRemoteHelper
 
 ## 基本用法
