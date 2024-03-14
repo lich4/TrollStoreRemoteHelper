@@ -1,6 +1,8 @@
-* [杂记](#杂记)
 
-# TrollStoreRemoteHelper
+## Instruction
+
+This tool is used to install tipa easily, integrated with XCode script. After installing TrollStoreRemoteHelper.tipa(use airdrop or url way), you can even login into iDevice via ssh without jailbreak. Support all environment with TrollStore.
+* helper bind port 1222; ssh bind port 1223, passwd is alpine
 
 ## 基本用法
 
