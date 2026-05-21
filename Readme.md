@@ -55,6 +55,19 @@ ECFFE318F937/tmp/TroIStoreRemoteHelperDemo.ipa
 注意: 目前使用的sshd为支持posix_spawn的sshdog, 然而sh仍然不支持posix_spawn,ssh登陆后执行外部命令会卡死,因此在arm64e设备上只能通过ssh执行命令.
 arm64设备则无此限制
 
+20260521重磅更新: 通过修改ash, 将vfork替换为posix_spawn, 解决了shell卡死的问题
+```bash
+ssh -p 1223 root@192.168.1.22 "ash"
+Warning: Permanently added '[192.168.1.22]:1223' (RSA) to the list of known hosts.
+root@192.168.1.22's password:
+ls
+Library
+MonkeyDevPackages
+aldente.conf
+aldente.db
+aldente.log
+testtool.plist
+```
 
 
 ```txt
